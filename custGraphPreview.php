@@ -198,10 +198,6 @@ $(document).ready(function() {
 			$tpl = getNode($inode);
 			$host = $tpl->id;
 			$hostname = $tpl->hostname;
-			if(endsWith($hostname, "unbelievable-machine.net"))
-			{
-				$hostname = substr($hostname,0,strpos($hostname,"unbelievable-machine.net") - 1);
-			}
 			
 			foreach($graphs as $graph)
 			{

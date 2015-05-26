@@ -147,9 +147,7 @@ else
 		$cursor = $m_collection->find(array('cid' => new MongoInt32($cid),'time' => array('$gt' => new MongoInt32($start), '$lt' => new MongoInt32($end))));		
 	}	
 }
-//$cursor = $m_collection->find(array('cid' => new MongoInt32($cid), 'hread' => 'WARNING - rb-n15-01-94-198-57-129.unbelievable-machine.net: rta 270.689ms, lost 0%'));
- 
- 
+
 /**
  * Paging
  */

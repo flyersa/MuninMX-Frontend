@@ -92,13 +92,9 @@ else
 		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.css">
 
 		<!-- FAVICONS -->
-		<?php if($_SERVER['SERVER_NAME'] == "muninmx.unbelievable-machine.net") { ?>
-			<link rel="shortcut icon" href="img/favicon_um.ico" type="image/x-icon">
-			<link rel="icon" href="img/favicon_um.ico" type="image/x-icon">
-		<?php } else { ?>
-			<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-			<link rel="icon" href="img/favicon.ico" type="image/x-icon">
-		<?php } ?>
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
 
 		<!-- GOOGLE FONT -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">

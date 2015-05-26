@@ -196,10 +196,6 @@ $(document).ready(function() {
 		{
 			$host = $tpl->node_id;
 			$hostname = $tpl->hostname;
-			if(endsWith($hostname, "unbelievable-machine.net"))
-			{
-				$hostname = substr($hostname,0,strpos($hostname,"unbelievable-machine.net") - 1);
-			}
 			$plugin = $tpl->plugin;
 			$graph = $tpl->graph;
         	$period = false;
