@@ -32,7 +32,10 @@ if(MAINTAINANCE > 0)
 // lets go
 header("Content-Type: text/html; charset=utf-8");
 
-session_start();
+if ($_SERVER['SCRIPT_URL'] != '/api.php') { // do not start a session for api calls
+	session_start();
+}
+
 
 if(isset($_SESSION['timezone']))
 {
