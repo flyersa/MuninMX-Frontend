@@ -297,7 +297,7 @@ function api_addCheck()
 	}
 	
 	if (getCurrentCheckCount ( $user->id ) < $user->max_checks) {
-		$result = $db->query ( "SELECT * FROM check_types WHERE id = '$_POST[checktype]'" );
+		$result = $db->query ( "SELECT * FROM check_types WHERE id = '$_REQUEST[checktype]'" );
 		if ($db->affected_rows < 1) {
 			badrequest ( "Undefined Check. Check Type not defined" );
 		} else {
@@ -347,7 +347,9 @@ function api_addCheck()
 				)
 				" );
 			
-			if ($db->insert_id <= 1) {
+			$checkInsertId = $db->insert_id;
+			
+			if ($checkInsertId <= 1) {
 				badrequest ( "Backend Error. Unable to save service check. Try again later" );
 			} else {
 				$cid = $db->insert_id;
@@ -377,6 +379,11 @@ function api_addCheck()
 			}
 		}
 	}
+	
+	$tpl->status = "ok";
+	$tpl->id = $checkInsertId;
+	$tpl->msg = "Check added.";
+	echo json_encode($tpl);
 }
 // END:FFX
 
