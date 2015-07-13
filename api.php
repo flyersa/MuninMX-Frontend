@@ -272,11 +272,118 @@ switch($method)
 	case "addEvent":
 		api_addEvent();
 		break;
-	
+		
+	case "addCheck":
+		api_addCheck();
+	break;
+		
 	default:
 		badrequest("unknown method specified");
 	
+		
+
 }
+	
+function api_addCheck() 
+{
+	global $user;
+	global $db;
+	if (getCurrentCheckCount ( $user->id ) < $user->max_checks) {
+	} else {
+		forbidden ( "To many checks. You need to upgrade your plan or buy check slots to create a new service check." );
+	}
+	
+	if (getCurrentCheckCount ( $user->id ) < $user->max_checks) {
+		$result = $db->query ( "SELECT * FROM check_types WHERE id = '$_REQUEST[checktype]'" );
+		if ($db->affected_rows < 1) {
+			badrequest ( "Undefined Check. Check Type not defined" );
+		} else {
+			$PBJ = $_REQUEST;
+			
+			// build json
+			$tpl = $result->fetch_object ();
+			
+			$params = array_merge ( array (), $_REQUEST );
+			$params ['command'] = $tpl->executable;
+			$json = postCheckToJson ( $params );
+			
+			if (getCurrentCheckCount ( $user->id ) < $user->max_checks) {
+				//
+			} else {
+				forbidden ( "Too many checks. You need to upgrade your plan or buy check slots to create a new service check." );
+			}
+			
+			// check if choosen contacts belong to this user
+			$contact_err = false;
+			$contacts = explode ( ",", $PBJ ['contacts'] );
+			if ($user->userrole != "admin") {
+				if (sizeof ( $contacts ) > 0) {
+					foreach ( $contacts as $contact ) {
+						$db->query ( "SELECT id FROM contacts WHERE user_id = '$user->id' AND id = '$contact'" );
+						if ($db->affected_rows < 1) {
+							$contact_err = true;
+						}
+					}
+					
+					if ($contact_err) {
+						forbidden ( "Contact Mismatch. You can only specify notify contacts that belong to your account" );
+					}
+				}
+			}
+			
+			// save check if no error occured
+			$escapedData = secureArray ( $_REQUEST );
+			$db->query ( "INSERT INTO service_checks (user_id,check_type,check_name,cinterval,json,accessgroup)
+				VALUES
+				($user->id,
+						$escapedData[checktype],
+					'$escapedData[checkname]',
+						$escapedData[interval],
+						'$json',
+						'$escapedData[accessgroup]'
+				)
+				" );
+			
+			$checkInsertId = $db->insert_id;
+			
+			if ($checkInsertId <= 1) {
+				badrequest ( "Backend Error. Unable to save service check. Try again later" );
+			} else {
+				$cid = $db->insert_id;
+				
+				// add tags
+				$tags = explode ( ",", $PBJ ['tags'] );
+				foreach ( $tags as $tag ) {
+					$tag = $db->real_escape_string ( $tag );
+					if (trim ( $tag ) != "") {
+						$db->query ( "INSERT INTO service_check_tags (tagname,check_id,user_id) VALUES ('$tag','$cid','$user->id')" );
+					}
+				}
+				
+				foreach ( $contacts as $contact ) {
+					$db->query ( "INSERT INTO notifications (contact_id,check_id,notifydown,notifyagain,notifyifup,notifyflap)
+		VALUES (
+		$contact,
+		$cid,
+		$escapedData[notifydown],
+		$escapedData[notifyagain],
+		$escapedData[notifyifup],
+				$escapedData[notifyflap]
+		)
+				" );
+				}
+				cvdQueueCheck ( $cid );
+			}
+		}
+	}
+	
+	$tpl->status = "ok";
+	$tpl->id = $checkInsertId;
+	$tpl->msg = "Check added.";
+	echo json_encode($tpl);
+}
+
+
 
 function api_addEvent()
 {
