@@ -586,6 +586,110 @@ if(!isLoggedIn())
 }
 </pre></div>
 
+
+<hr>
+<h2 id="markdown-header-editnode">addCheck</h2>
+<p>Add a check.</p>
+
+<p>Required Parameters</p>
+<ul>
+<li>checkname - descriptive name (STRING)</li>
+<li>interval - check intervall in minutes (NUMBER STRING)</li>
+<li>notifydown - notify when down longer than xx minutes (NUMBER STRING)</li>
+<li>notifyagain - repeat notification every xx check cycles when still down (NUMBER STRING)</li>
+<li>notifyifup - send up notification (NUMBER STRING boolean "1"/"0")</li>
+<li>checktype - id of the check to perform (NUMBER STRING)
+	<ul>
+		<li>PING (1)
+			<ul>
+			<li>nonearg - hostname/ipaddress (STRING)</li>
+			</ul>
+		</li>
+		<li>HTTP(S) (2)
+			<ul>
+			<li>uri - hostname/ipaddress (STRING)</li>
+			</ul>
+		</li>
+		<li>TCP (3)/ UDP (4)
+			<ul>
+			<li>param[H] - hostname/ipaddress (STRING)</li>
+			<li>param[p] - port (NUMBER STRING)
+			</ul>
+		</li>
+		<li>SSL CERTIFICATE EXPIRY (5)
+			<ul>
+			<li>param[c] - [hostname]:[port] (STRING)</li>
+			<li>param[D] - alert when certificate expires in xx days (NUMBER STRING)</li>
+			</ul>
+		</li>
+		</ul>
+</li>
+</ul>
+</ul>
+
+<p>Optional Parameters</p>
+<ul>
+<li>contacts - select contacts for notifications. Leave empty if you do not want to send notifications. (CSV NUMBER STRING of contactIds)</li>
+<li>accessgroup - will give Users with the assigned access group Read-Only access to this service check (STRING group name)</li>
+<li>notifyflap - ?? notify if flapping (NUMBER STRING boolean "1"/"0")</li>
+<li>checktype specific optional parameters
+	<ul>
+		<li>HTTP(S) (2)
+			<ul>
+			<li>user - auth username (STRING)</li>
+			<li>pass - auth password (STRING)</li>
+			<li>param[e] - expect string (STRING)</li>
+			<li>param[r] - string search page (STRING)</li>
+			<li>param[A] - user-agent (STRING)</li>
+			<li>param[f] - what to do if a redirect happens  (STRING)
+				<ul>
+				 <li>"ok" = do nothing</li>
+				 <li>"critical" = trigger error</li>
+				 <li>"follow" = follow redirect</li>
+				 <li>"sticky" = follow, but stick to ip)</li>
+				 </ul>
+			</li>
+			<li>param[t] - timeout in seconds (NUMBER STRING)</li>
+			<li>param[c] - critical loading time in seconds (NUMBER STRING)</li>
+			</ul>
+		</li>
+		<li>TCP (3)/ UDP (4)
+			<ul>
+			<li>param[s] - send string (STRING)</li>
+			<li>param[e] - expect string (STRING)</li>
+			<li>param[S] - use SSL (NUMBER STRING boolean "1"/"0")</li>
+			</ul>
+		</li>
+		<li>SSL CERTIFICATE EXPIRY (5)
+			<ul>
+			<li>param[c] - [hostname]:[port] (STRING)</li>
+			<li>param[D] - alert when certificate expires in xx days (NUMBER STRING)</li>
+			</ul>
+		</li>
+		</ul>
+</li>
+</ul>
+</ul>
+
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&method=addCheck&checkname=apitest1&checktype=1&interval=10&tags=apitag1,apitag2&notifydown=10&notifyagain=1&notifyifup=1&nonearg=127.0.0.1</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+{
+	"id":27,
+	"check_name":"PING",
+	"executable":"check_icmp",
+	"status":"ok",
+	"msg":"Check added."
+}
+</pre></div>
+
+
+
+
+
     </section>
    
 
