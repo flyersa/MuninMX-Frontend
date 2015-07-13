@@ -273,11 +273,9 @@ switch($method)
 		api_addEvent();
 		break;
 		
-	// START:FFX
 	case "addCheck":
 		api_addCheck();
 	break;
-	// END:FFX
 		
 	default:
 		badrequest("unknown method specified");
@@ -286,7 +284,6 @@ switch($method)
 
 }
 	
-	// START:FFX
 function api_addCheck() 
 {
 	global $user;
@@ -385,7 +382,6 @@ function api_addCheck()
 	$tpl->msg = "Check added.";
 	echo json_encode($tpl);
 }
-// END:FFX
 
 
 
