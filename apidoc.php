@@ -69,6 +69,22 @@ if(!isLoggedIn())
 									<h2>MuninMX RESTful API - Table of contents</h2>
 								</header>
 								<!-- widget div-->
+								<style>
+									#toc-h2 {
+										height:200px;
+										/*-moz-column-count: 3;*/
+										/*-moz-column-gap: 20px;*/
+										/*-webkit-column-count: 3;*/
+										/*-webkit-column-gap: 20px;*/
+										/*column-count: 3;*/
+										/*column-gap: 20px;*/
+										-webkit-column-width: 200px; /* Chrome, Safari, Opera */
+										-moz-column-width: 200px; /* Firefox */
+    									column-width: 200px;
+    									-moz-column-fill: auto; /* Firefox */
+    									column-fill: auto;
+									}
+								</style>
 								<div>
 				
 									<!-- widget edit box -->
