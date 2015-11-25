@@ -212,7 +212,19 @@ switch($method)
 		{
 			badrequest("name parameter is required");	
 		}
-		api_listChecksByName($_REQUEST['name'])	;
+		api_listChecksByName($_REQUEST['name']);
+		break;
+		
+	case "listChecks":
+		api_listChecks();
+		break;
+		
+	case "deleteCheck":
+		if(!is_numeric($_REQUEST['checkid']))
+		{
+			badrequest("checkid parameter is required");
+		}
+		api_deleteCheck($_REQUEST['checkid']);
 		break;
 		
 	case "editNode":
@@ -972,30 +984,23 @@ function api_listChecksByName($name)
 	
 	
 	$tpl['role'] = $user->userrole; // used role
-	
-	
 	$name = $db->real_escape_string($name);
 	
-	if($user->userrole == "admin")
-	{
+	if($user->userrole == "admin"){
 		$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE lower(service_checks.check_name) like lower('$name%')");
 	}
-	else
-	{
-		if($user->userrole == "userext")
-		{
+	else{
+		if($user->userrole == "userext"){
 			$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE service_checks.user_id = '$user->id' AND lower(service_checks.check_name) like lower('$name%')");
 		}
-		else
-		{
+		else{
 			$usql = getUserGroupsSQL(false,"service_checks.","accessgroup");
 			$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE (service_checks.user_id = '$user->id' OR ($usql)) AND lower(service_checks.check_name) like lower('$name%')");
 			//echo "SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE service_checks.user_id = '$_SESSION[user_id]' OR ($usql)";
 		}
 	
 	}
-	if($db->affected_rows < 1)
-	{
+	if($db->affected_rows < 1)	{
 		notFound("no results");
 	}
 	
@@ -1008,6 +1013,73 @@ function api_listChecksByName($name)
 	$tpl['status'] = "ok";
 	echo json_encode($tpl);
 }
+
+function api_listChecks()
+{
+	global $db;
+	global $user;
+
+
+	$tpl['role'] = $user->userrole; // used role
+
+	if($user->userrole == "admin"){
+		$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id");
+	}
+	else{
+		if($user->userrole == "userext"){
+			$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE service_checks.user_id = '$user->id'");
+		}
+		else{
+			$usql = getUserGroupsSQL(false,"service_checks.","accessgroup");
+			$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE (service_checks.user_id = '$user->id' OR ($usql))");
+		}
+
+	}
+	if($db->affected_rows < 1)	{
+		notFound("no results");
+	}
+
+	$tpl['checks'] = array();
+	while($entry = $result->fetch_object())
+	{
+		$tpl['checks'][] = $entry;
+	}
+
+	$tpl['status'] = "ok";
+	echo json_encode($tpl);
+}
+
+function api_deleteCheck($checkid)
+{
+	global $db;
+	global $user;
+	
+	$tpl['role'] = $user->userrole; // used role
+	$checkid = $db->real_escape_string($checkid);
+	
+	if($user->userrole == "admin"){
+		$result = $db->query("DELETE FROM service_checks WHERE id = '$checkid'");
+	}
+	else{
+		if($user->userrole == "userext"){
+			$result = $db->query("DELETE FROM service_checks WHERE service_checks.user_id = '$user->id' AND id = '$checkid'");
+		}
+		else{
+			$usql = getUserGroupsSQL(false,"service_checks.","accessgroup");
+			$result = $db->query("DELETE FROM service_checks WHERE (service_checks.user_id = '$user->id' OR ($usql)) AND id = '$checkid'");
+		}
+	
+	}
+	
+	$affected_rows = $db->affected_rows;
+	if($affected_rows < 1){
+		notFound("no results");
+	}
+	
+	$tpl['status'] = "ok";
+	echo json_encode($tpl);
+}
+
 
 function api_deleteNode($nodeid)
 {
@@ -1182,6 +1254,7 @@ function api_deleteBucket($bid)
 		forbidden("access to bucket denied");
 	}	
 }
+
 
 function api_editBucket($bid,$graphname,$graphlabel,$groupname)
 {

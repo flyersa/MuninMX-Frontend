@@ -83,10 +83,11 @@ if(!isLoggedIn())
 										<ul>
 											<li><a href="#h1-basics">Basics</a></li>
 											
-											<li><a id="h1-methods" href="#">API Methods</a></li>
+											<li><a id="h1-methods" href="#h1-methods">API Methods</a></li>
 											<ul id="toc-h2">
 												
 												<script>
+												/*
 													$(function(){
 														var $h2toc = $('#toc-h2');
 														$.each($('a[name^="h2-"]'), function(index, e) {
@@ -110,28 +111,61 @@ if(!isLoggedIn())
 															return false
 														});
 													});
+													*/
 												</script>
-													<li style=""><a href="#h2-getRole">getRole</a></li>
-													<li style=""><a href="#h2-listNodes">listNodes</a></li>
-													<li style=""><a href="#h2-getNode">getNode</a></li>
-													<li style=""><a href="#h2-getChartData">getChartData</a></li>
-													<li style=""><a href="#h2-listBuckets">listBuckets</a></li>
-													<li style=""><a href="#h2-getBucket">getBucket</a></li>
-													<li style=""><a href="#h2-getBucketData">getBucketData</a></li>
-													<li style=""><a href="#h2-listGroups">listGroups</a></li>
-													<li style=""><a href="#h2-listNodesByGroup">listNodesByGroup</a></li>
-													<li style=""><a href="#h2-addBucket">addBucket</a></li>
-													<li style=""><a href="#h2-editBucket">editBucket</a></li>
-													<li style=""><a href="#h2-deleteBucket">deleteBucket</a></li>
-													<li style=""><a href="#h2-reloadPlugins">reloadPlugins</a></li>
+													<li>Plugins</li>
+													<ul>
+														<li style=""><a href="#h2-reloadPlugins">reloadPlugins</a></li>
+													</ul>
+												
+													<li>Roles</li>
+													<ul>
+														<li style=""><a href="#h2-getRole">getRole</a></li>
+														<li style=""><a href="#h2-listGroups">listGroups</a></li>
+													</ul>
+													
+													<li>Nodes</li>
+													<ul>
 													<li style=""><a href="#h2-addNode">addNode</a></li>
-													<li style=""><a href="#h2-deleteNode">deleteNode</a></li>
+													<li style=""><a href="#h2-getNode">getNode</a></li>
+													<li style=""><a href="#h2-listNodes">listNodes</a></li>
+													<li style=""><a href="#h2-listNodesByGroup">listNodesByGroup</a></li>
 													<li style=""><a href="#h2-editNode">editNode</a></li>
-													<li style=""><a href="#h2-packageList">packageList</a></li>
-													<li style=""><a href="#h2-addEvent">addEvent</a></li>
-													<li style=""><a href="#h2-addCheck">addCheck</a></li>
-													<li style=""><a href="#h2-listChecksByName">listChecksByName</a></li>
-											
+													<li style=""><a href="#h2-deleteNode">deleteNode</a></li>
+													</ul>
+													
+													<li>Data</li>
+													<ul>
+														<li style=""><a href="#h2-getChartData">getChartData</a></li>
+													</ul>
+													
+													<li>Buckets</li>
+													<ul>
+														<li style=""><a href="#h2-addBucket">addBucket</a></li>
+														<li style=""><a href="#h2-getBucket">getBucket</a></li>
+														<li style=""><a href="#h2-getBucketData">getBucketData</a></li>
+														<li style=""><a href="#h2-listBuckets">listBuckets</a></li>
+														<li style=""><a href="#h2-editBucket">editBucket</a></li>
+														<li style=""><a href="#h2-deleteBucket">deleteBucket</a></li>
+													</ul>
+													
+													<li>Packages</li>
+													<ul>
+														<li style=""><a href="#h2-packageList">packageList</a></li>
+													</ul>
+													
+													<li>Events</li>
+													<ul>
+														<li style=""><a href="#h2-addEvent">addEvent</a></li>
+													</ul>
+													
+													<li>Checks</li>
+													<ul>
+														<li style=""><a href="#h2-addCheck">addCheck</a></li>
+														<li style=""><a href="#h2-listChecks">listChecks</a></li>
+														<li style=""><a href="#h2-listChecksByName">listChecksByName</a></li>
+														<li style=""><a href="#h2-deleteCheck">addCheck</a></li>
+													</ul>										
 											
 												<script>
 												/*
@@ -815,15 +849,60 @@ if(!isLoggedIn())
 
 
 <hr>
+<h2 id="markdown-header-editnode"><a name="h2-listChecks"></a>listChecks</h2>
+<p>
+	Returns a list of all checks that are accessible for the current user.
+</p>
+
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecks</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listChecks' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"role":"admin",
+		"checks":[
+			{
+				"id":"2",
+				"user_id":"1",
+				"check_type":"3",
+				"check_name":"test.example.com",
+				"cinterval":"5",
+				"is_active":"1",
+				"locations":"",
+				"json":"{\"checkname\":\"test.example.com\",\"interval\":\"5\",\"tags\":\"ldap\",\"accessgroup\":\"Test-Server\",\"checktype\":\"3\",\"param\":[\"-H|##|test.example.com\",\"-p|##|389\"],\"contacts\":[\"3\"],\"notifydown\":\"5\",\"notifyagain\":\"0\",\"notifyflap\":\"0\",\"notifyifup\":\"1\",\"command\":\"check_tcp\",\"user_id\":\"2\"}",
+				"luptime":"N\/A",
+				"accessgroup":"Test-Server",
+				"check_desc_name":"TCP",
+				"username":"admin"
+			},
+			...
+		],
+		"status":"ok"
+	}
+</pre></div>
+
+
+
+
+
+<hr>
 <h2 id="markdown-header-editnode"><a name="h2-listChecksByName"></a>listChecksByName</h2>
 <p>
-	Returns a list of all checks start start with the given name fragment.<br/>
+	Returns a list of all checks starting with the given name fragment.<br/>
 	Checks that are not accessible for the current user are not included in the result list.
 </p>
 
 <p>Mandatory Parameters</p>
 <ul>
-<li>node - numeric, id of a node for single packagelist of a selected node</li>
+<li>name - string, prefix for a check name</li>
 </ul>
 <p>Example Request:</p>
 <div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&nodeid=1</span>
@@ -863,6 +942,37 @@ if(!isLoggedIn())
 
 
 
+
+<hr>
+<h2 id="markdown-header-editnode"><a name="h2-deleteCheck"></a>deleteCheck</h2>
+<p>
+	Deletes the check with the given checkId.<br/>
+	Checks that are not accessible for the current user cannot be deleted.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>checkid - numeric, id of a check</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&nodeid=1</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteCheck' \
+\
+         -d 'id=999999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"role":"admin",
+		"status":"ok"
+	}
+</pre></div>
 
 
 
