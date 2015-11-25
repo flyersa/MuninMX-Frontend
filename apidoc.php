@@ -9,9 +9,14 @@ if(!isLoggedIn())
 <!DOCTYPE html>
 <html lang="en-us">
 	<head>
-	<?php $tpl->title = APP_NAME . " - API Documentation"; include("templates/core/head.tpl.php"); ?>
+	<?php 
+		$tpl->title = APP_NAME . " - API Documentation"; 
+		include("templates/core/head.tpl.php"); 
+	?>
+	<?php include("templates/core/scripts.tpl.php"); ?>
+	
 	</head>
-	<body <?php if($_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
+	<body <?php if(isset($_SESSION['minify']) && $_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
 
 		<!-- HEADER -->
 		<header id="header">
@@ -52,11 +57,76 @@ if(!isLoggedIn())
 						<article class="col-sm-12">
 				
 							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-toc" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+					
+								<header>
+									<span class="widget-icon"> <i class="fa fa-align-justify"></i> </span>
+									<h2>MuninMX RESTful API - Table of contents</h2>
+								</header>
+								<!-- widget div-->
+								<div>
+				
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+				
+									</div>
+									<!-- end widget edit box -->
+				
+									<!-- widget content -->
+									<div class="widget-body">
+										<ul>
+											<li><a href="#h1-basics">Basics</a></li>
+											
+											<li><a id="h1-methods" href="#">API Methods</a></li>
+											<ul id="toc-h2">
+												<script>
+													$(function(){
+														var $h2toc = $('#toc-h2');
+														$.each($('a[name^="h2-"]'), function(index, e) {
+															$e = $(e);
+															var content = $e.parent().text();
+															var name = $e.attr('name');
+															$h2toc.append('<li style="display:none;"><a href="#'+name+'">'+content+'</a></li>');
+														});
+														 
+														$('a#h1-methods').on('click', function() {
+															if ($h2toc.attr('data-state') != 'open') { 
+																$h2toc.find('li').slideDown(250, function() {
+																	$h2toc.attr('data-state', 'open');
+																});
+															}
+															else {
+																$h2toc.find('li').slideUp(250, function() {
+																	$h2toc.attr('data-state', 'closed');
+																});
+															}
+															return false
+														});
+													});
+												</script>
+											</ul>
+										
+										</ul>
+									</div>
+								</div>
+							</div>
+						</article>
+				</div>
+				
+				
+				
+				<!-- row -->
+				<div class="row">
+						<!-- NEW WIDGET START -->
+						<article class="col-sm-12">
+				
+							<!-- Widget ID (each widget will need unique ID)-->
 							<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-x" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 					
 								<header>
 									<span class="widget-icon"> <i class="fa fa-align-justify"></i> </span>
-									<h2>MuninMX RESTful API Documentation </h2>
+									<h2>MuninMX RESTful API - Documentation </h2>
 								</header>
 								<!-- widget div-->
 								<div>
@@ -72,7 +142,7 @@ if(!isLoggedIn())
 									<div class="widget-body">
 
   <section id="wiki-content" class="wiki-content">
-      <h1 id="markdown-header-basics">Basics</h1>
+      <h1 id="markdown-header-basics"><a name="h1-basics"></a>Basics</h1>
       
 <h2 id="markdown-header-request-basics">Request Basics</h2>
 <p>You can use POST or GET to communicate with the MuninMX API. The parameters <strong>apikey</strong> and <strong>method</strong> must be given.</p>
@@ -99,9 +169,9 @@ if(!isLoggedIn())
 <hr>
 <h2 id="markdown-header-api-caching">API Caching</h2>
 <p>Please note that if you use GET that the API caches all results for 60 seconds. We recommend using GET for storage backend querys such as getChartData. </p>
-<h1 id="markdown-header-api-methods">API Methods</h1>
+<h1 id="markdown-header-api-methods"><a name="h1-methods"></a>API Methods</h1>
 <p>Some methods are only available to certain user roles (User Extended or Admin). You can see your user role status by using the getRole method.</p>
-<h2 id="markdown-header-getrole">getRole</h2>
+<h2 id="markdown-header-getrole"><a name="h2-getRole"></a>getRole</h2>
 <p>Will return your user role.</p>
 <p>Example Request:</p>
 <div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getRole</span>
@@ -116,7 +186,7 @@ if(!isLoggedIn())
 <p>Valid Roles are: user, userext and admin</p>
 
 <hr>
-<h2 id="markdown-header-listnodes">listNodes</h2>
+<h2 id="markdown-header-listnodes"><a name="h2-listNodes"></a>listNodes</h2>
 <p>Will return a list of all your nodes.</p>
 <p>Optional Parameter: &amp;search=</p>
 <p>Example Request:</p>
@@ -140,7 +210,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-getnode">getNode</h2>
+<h2 id="markdown-header-getnode"><a name="h2-getNode"></a>getNode</h2>
 <p>Will return all plugin and graph definitions from a node. <strong>nodeid parameter is required</strong></p>
 <p>Example Request:</p>
 <div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getNode&amp;nodeid=1509</span>
@@ -233,7 +303,7 @@ if(!isLoggedIn())
 <p><strong>Values in this call will only refresh every QueryInterval based contact to the node. To fetch plugin values from the storage backend you need to issue a getChartData call</strong></p>
 
 <hr>
-<h2 id="markdown-header-getchartdata">getChartData</h2>
+<h2 id="markdown-header-getchartdata"><a name="h2-getChartData"></a>getChartData</h2>
 <p>Will return graph values from the storage backend for a given plugin. <strong>nodeid and plugin parameter is required</strong></p>
 <p>Parameters:</p>
 <ul>
@@ -301,7 +371,7 @@ if(!isLoggedIn())
 <p>For label definitions of the single graph items per plugin you can use getNode</p>
 
 <hr>
-<h2 id="markdown-header-listbuckets">listBuckets</h2>
+<h2 id="markdown-header-listbuckets"><a name="h2-listBuckets"></a>listBuckets</h2>
 <p>returns a list of all your bucket stats</p>
 <p>Example Request:</p>
 <div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listBuckets</span>
@@ -324,7 +394,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-getbucket">getBucket</h2>
+<h2 id="markdown-header-getbucket"><a name="h2-getBucket"></a>getBucket</h2>
 <p>receive a single bucket. <strong>Required Parameter: bucketid (numeric)
 </strong></p>
 <p>Example Request:</p>
@@ -337,7 +407,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-getbucketdata">getBucketData</h2>
+<h2 id="markdown-header-getbucketdata"><a name="h2-getBucketData"></a>getBucketData</h2>
 <p>returns data from the storage backend for that bucket. **Required Parameter: bucketid (numeric)</p>
 <p>By default will only return the last 30/31 days. You can add <strong>start</strong> and <strong>end</strong> parameter (numeric) with a unixtimestamp for better range results.</p>
 <p>Example Request:</p>
@@ -363,7 +433,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-listgroups">listGroups</h2>
+<h2 id="markdown-header-listgroups"><a name="h2-listGroups"></a>listGroups</h2>
 <p>return all groups from nodes</p>
 <p>Example Request:</p>
 <div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listGroups</span>
@@ -375,7 +445,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-listnodesbygroup">listNodesByGroup</h2>
+<h2 id="markdown-header-listnodesbygroup"><a name="h2-listNodesByGroup"></a>listNodesByGroup</h2>
 <p>return all nodes from a given group. <strong>group parameter (string) is required</strong></p>
 <p>Example Request:</p>
 <div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listNodesByGroup&amp;group=clavain</span>
@@ -398,7 +468,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-addbucket">addBucket</h2>
+<h2 id="markdown-header-addbucket"><a name="h2-addBucket"></a>addBucket</h2>
 <p>create a new bucketstat</p>
 <p>graphname and graphlabel parameters are required. groupname parameter is optional.</p>
 <p>Example Request:</p>
@@ -411,7 +481,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editbucket">editBucket</h2>
+<h2 id="markdown-header-editbucket"><a name="h2-editBucket"></a>editBucket</h2>
 <p>edit a buckets name, label.</p>
 <p>bucketid, graphname and graphlabel are required. groupname is optional.</p>
 <p>Example Request:</p>
@@ -424,7 +494,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-deletebucket">deleteBucket</h2>
+<h2 id="markdown-header-deletebucket"><a name="h2-deleteBucket"></a>deleteBucket</h2>
 <p>delete a bucketstat.</p>
 <p>bucketid (numeric) is required</p>
 <p>Example Request:</p>
@@ -437,7 +507,7 @@ if(!isLoggedIn())
 </pre></div>
 
 
-<h2 id="markdown-header-reloadplugins">reloadPlugins</h2>
+<h2 id="markdown-header-reloadplugins"><a name="h2-reloadPlugins"></a>reloadPlugins</h2>
 <p>will try to reload plugins for the given node. This is useful if you added a new munin plugin. Plugins are only refreshed for the cache once per day if you not refresh yourself.</p>
 <p>nodeid parameter (numeric) is reuqired.</p>
 <p>Example Request:</p>
@@ -450,7 +520,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-addnode">addNode</h2>
+<h2 id="markdown-header-addnode"><a name="h2-addNode"></a>addNode</h2>
 <p>add a new munin-node for monitoring.</p>
 <p>Required Parameters:</p>
 <ul>
@@ -474,7 +544,7 @@ if(!isLoggedIn())
 </pre></div>
 
 
-<h2 id="markdown-header-deletenode">deleteNode</h2>
+<h2 id="markdown-header-deletenode"><a name="h2-deleteNode"></a>deleteNode</h2>
 <p>delete a node from the system. dequeue from collector, remove plugin cache and delete all associated graph data.</p>
 <p>nodeid parameter is required.</p>
 <p>Example Request:</p>
@@ -487,7 +557,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editnode">editNode</h2>
+<h2 id="markdown-header-editnode"><a name="h2-editNode"></a>editNode</h2>
 <p>all parameters optional and required from addNode are required. <strong>You also need to specify the nodeid (numeric) parameter</strong>:</p>
 <p>Required Parameters:</p>
 <ul>
@@ -513,7 +583,7 @@ if(!isLoggedIn())
 </section>
 
 <hr>
-<h2 id="markdown-header-editnode">packageList</h2>
+<h2 id="markdown-header-editnode"><a name="h2-packageList"></a>packageList</h2>
 <p>Returns a list of all tracked packages.</p>
 
 <p>Optional Parameters</p>
@@ -548,7 +618,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editnode">addEvent</h2>
+<h2 id="markdown-header-editnode"><a name="h2-addEvent"></a>addEvent</h2>
 <p>Add a event to graphs.</p>
 
 <p>Required Parameters</p>
@@ -588,7 +658,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode">addCheck</h2>
+<h2 id="markdown-header-editnode"><a name="h2-addCheck"></a>addCheck</h2>
 <p>Add a check.</p>
 
 <p>Required Parameters</p>
