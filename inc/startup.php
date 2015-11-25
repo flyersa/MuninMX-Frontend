@@ -60,7 +60,7 @@ try {
 }
 catch(Exception $e) {
 	// fail gracefully - this way the frontend is "usable" even without a running mongodb backend
-	error_log("Cannot access mongodb backend: " . $e);
+	//error_log("Cannot access mongodb backend: " . $e);
 }
 
 
