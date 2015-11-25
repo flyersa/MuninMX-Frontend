@@ -13,7 +13,7 @@ if(!isLoggedIn())
 		$tpl->title = APP_NAME . " - API Documentation"; 
 		include("templates/core/head.tpl.php"); 
 	?>
-	<?php include("templates/core/scripts.tpl.php"); ?>
+	<?php //include("templates/core/scripts.tpl.php"); ?>
 	
 	</head>
 	<body <?php if(isset($_SESSION['minify']) && $_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
@@ -29,6 +29,11 @@ if(!isLoggedIn())
 		<?php include("templates/nav/left.tpl.php"); ?>
 		<!-- END NAVIGATION -->
 
+		
+		<?php
+			$user = getUserObject($_SESSION['user_id']);
+		?>
+		
 		<!-- MAIN PANEL -->
 		<div id="main" role="main">
 
@@ -80,6 +85,7 @@ if(!isLoggedIn())
 											
 											<li><a id="h1-methods" href="#">API Methods</a></li>
 											<ul id="toc-h2">
+												
 												<script>
 													$(function(){
 														var $h2toc = $('#toc-h2');
@@ -104,6 +110,55 @@ if(!isLoggedIn())
 															return false
 														});
 													});
+												</script>
+													<li style=""><a href="#h2-getRole">getRole</a></li>
+													<li style=""><a href="#h2-listNodes">listNodes</a></li>
+													<li style=""><a href="#h2-getNode">getNode</a></li>
+													<li style=""><a href="#h2-getChartData">getChartData</a></li>
+													<li style=""><a href="#h2-listBuckets">listBuckets</a></li>
+													<li style=""><a href="#h2-getBucket">getBucket</a></li>
+													<li style=""><a href="#h2-getBucketData">getBucketData</a></li>
+													<li style=""><a href="#h2-listGroups">listGroups</a></li>
+													<li style=""><a href="#h2-listNodesByGroup">listNodesByGroup</a></li>
+													<li style=""><a href="#h2-addBucket">addBucket</a></li>
+													<li style=""><a href="#h2-editBucket">editBucket</a></li>
+													<li style=""><a href="#h2-deleteBucket">deleteBucket</a></li>
+													<li style=""><a href="#h2-reloadPlugins">reloadPlugins</a></li>
+													<li style=""><a href="#h2-addNode">addNode</a></li>
+													<li style=""><a href="#h2-deleteNode">deleteNode</a></li>
+													<li style=""><a href="#h2-editNode">editNode</a></li>
+													<li style=""><a href="#h2-packageList">packageList</a></li>
+													<li style=""><a href="#h2-addEvent">addEvent</a></li>
+													<li style=""><a href="#h2-addCheck">addCheck</a></li>
+													<li style=""><a href="#h2-listChecksByName">listChecksByName</a></li>
+											
+											
+												<script>
+												/*
+													$(function(){
+														var $h2toc = $('#toc-h2');
+														$.each($('a[name^="h2-"]'), function(index, e) {
+															$e = $(e);
+															var content = $e.parent().text();
+															var name = $e.attr('name');
+															$h2toc.append('<li style="display:none;"><a href="#'+name+'">'+content+'</a></li>');
+														});
+														 
+														$('a#h1-methods').on('click', function() {
+															if ($h2toc.attr('data-state') != 'open') { 
+																$h2toc.find('li').slideDown(250, function() {
+																	$h2toc.attr('data-state', 'open');
+																});
+															}
+															else {
+																$h2toc.find('li').slideUp(250, function() {
+																	$h2toc.attr('data-state', 'closed');
+																});
+															}
+															return false
+														});
+													});
+													*/
 												</script>
 											</ul>
 										
@@ -174,7 +229,7 @@ if(!isLoggedIn())
 <h2 id="markdown-header-getrole"><a name="h2-getRole"></a>getRole</h2>
 <p>Will return your user role.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getRole</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getRole</span>
 </pre></div>
 
 
@@ -190,7 +245,7 @@ if(!isLoggedIn())
 <p>Will return a list of all your nodes.</p>
 <p>Optional Parameter: &amp;search=</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listNodes&amp;search=destiny</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listNodes&amp;search=destiny</span>
 </pre></div>
 
 
@@ -213,7 +268,7 @@ if(!isLoggedIn())
 <h2 id="markdown-header-getnode"><a name="h2-getNode"></a>getNode</h2>
 <p>Will return all plugin and graph definitions from a node. <strong>nodeid parameter is required</strong></p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getNode&amp;nodeid=1509</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getNode&amp;nodeid=1509</span>
 </pre></div>
 
 
@@ -313,7 +368,7 @@ if(!isLoggedIn())
 <li>end  (integer, unixtimestamp, optional)</li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getChartData&amp;nodeid=1509&amp;plugin=cpu&amp;start=1404395178</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getChartData&amp;nodeid=1509&amp;plugin=cpu&amp;start=1404395178</span>
 </pre></div>
 
 
@@ -374,7 +429,7 @@ if(!isLoggedIn())
 <h2 id="markdown-header-listbuckets"><a name="h2-listBuckets"></a>listBuckets</h2>
 <p>returns a list of all your bucket stats</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listBuckets</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listBuckets</span>
 </pre></div>
 
 
@@ -398,7 +453,7 @@ if(!isLoggedIn())
 <p>receive a single bucket. <strong>Required Parameter: bucketid (numeric)
 </strong></p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getBucket&amp;bucketid=4</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getBucket&amp;bucketid=4</span>
 </pre></div>
 
 
@@ -411,7 +466,7 @@ if(!isLoggedIn())
 <p>returns data from the storage backend for that bucket. **Required Parameter: bucketid (numeric)</p>
 <p>By default will only return the last 30/31 days. You can add <strong>start</strong> and <strong>end</strong> parameter (numeric) with a unixtimestamp for better range results.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getBucketData&amp;bucketid=4&amp;start=1404463401</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getBucketData&amp;bucketid=4&amp;start=1404463401</span>
 </pre></div>
 
 
@@ -436,7 +491,7 @@ if(!isLoggedIn())
 <h2 id="markdown-header-listgroups"><a name="h2-listGroups"></a>listGroups</h2>
 <p>return all groups from nodes</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listGroups</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listGroups</span>
 </pre></div>
 
 
@@ -448,7 +503,7 @@ if(!isLoggedIn())
 <h2 id="markdown-header-listnodesbygroup"><a name="h2-listNodesByGroup"></a>listNodesByGroup</h2>
 <p>return all nodes from a given group. <strong>group parameter (string) is required</strong></p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listNodesByGroup&amp;group=clavain</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listNodesByGroup&amp;group=clavain</span>
 </pre></div>
 
 
@@ -472,7 +527,7 @@ if(!isLoggedIn())
 <p>create a new bucketstat</p>
 <p>graphname and graphlabel parameters are required. groupname parameter is optional.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=addBucket&amp;graphname=People%20in%20Room&amp;graphlabel=people</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=addBucket&amp;graphname=People%20in%20Room&amp;graphlabel=people</span>
 </pre></div>
 
 
@@ -485,7 +540,7 @@ if(!isLoggedIn())
 <p>edit a buckets name, label.</p>
 <p>bucketid, graphname and graphlabel are required. groupname is optional.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=editBucket&amp;bucketid=11&amp;graphname=humans%20in%20room&amp;graphlabel=humans</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=editBucket&amp;bucketid=11&amp;graphname=humans%20in%20room&amp;graphlabel=humans</span>
 </pre></div>
 
 
@@ -498,7 +553,7 @@ if(!isLoggedIn())
 <p>delete a bucketstat.</p>
 <p>bucketid (numeric) is required</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=deleteBucket&amp;bucketid=11</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=deleteBucket&amp;bucketid=11</span>
 </pre></div>
 
 
@@ -511,7 +566,7 @@ if(!isLoggedIn())
 <p>will try to reload plugins for the given node. This is useful if you added a new munin plugin. Plugins are only refreshed for the cache once per day if you not refresh yourself.</p>
 <p>nodeid parameter (numeric) is reuqired.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=reloadPlugins&amp;nodeid=1509</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=reloadPlugins&amp;nodeid=1509</span>
 </pre></div>
 
 
@@ -535,7 +590,7 @@ if(!isLoggedIn())
 <li>authpw - string, required if you use muninmxauth plugin, only allow connection to munin node with proper password </li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=addNode&amp;hostname=clavain.com&amp;port=4949&amp;interval=10</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=addNode&amp;hostname=clavain.com&amp;port=4949&amp;interval=10</span>
 </pre></div>
 
 
@@ -548,7 +603,7 @@ if(!isLoggedIn())
 <p>delete a node from the system. dequeue from collector, remove plugin cache and delete all associated graph data.</p>
 <p>nodeid parameter is required.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=deleteNode&amp;nodeid=1509</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=deleteNode&amp;nodeid=1509</span>
 </pre></div>
 
 
@@ -572,7 +627,7 @@ if(!isLoggedIn())
 <li>authpw - string, required if you use muninmxauth plugin, only allow connection to munin node with proper password </li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=editNode&amp;nodeid=1509&amp;hostname=destiny.clavain.com&amp;port=4949&amp;interval=5&amp;groupname=clavain</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=editNode&amp;nodeid=1509&amp;hostname=destiny.clavain.com&amp;port=4949&amp;interval=5&amp;groupname=clavain</span>
 </pre></div>
 
 
@@ -591,7 +646,7 @@ if(!isLoggedIn())
 <li>node - numeric, id of a node for single packagelist of a selected node</li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&method=packageList</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=packageList</span>
 </pre></div>
 
 
@@ -638,7 +693,7 @@ if(!isLoggedIn())
 </ul>
 
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&method=addEvent&event_title=Nagios Alert&color=red&node=app01-myserver.example.com</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addEvent&event_title=Nagios Alert&color=red&node=app01-myserver.example.com</span>
 </pre></div>
 
 
@@ -742,7 +797,7 @@ if(!isLoggedIn())
 </ul>
 
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&method=addCheck&checkname=apitest1&checktype=1&interval=10&tags=apitag1,apitag2&notifydown=10&notifyagain=1&notifyifup=1&nonearg=127.0.0.1</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addCheck&checkname=apitest1&checktype=1&interval=10&tags=apitag1,apitag2&notifydown=10&notifyagain=1&notifyifup=1&nonearg=127.0.0.1</span>
 </pre></div>
 
 <p>Example Response:</p>
@@ -755,6 +810,57 @@ if(!isLoggedIn())
 	"msg":"Check added."
 }
 </pre></div>
+
+
+
+
+<hr>
+<h2 id="markdown-header-editnode"><a name="h2-listChecksByName"></a>listChecksByName</h2>
+<p>
+	Returns a list of all checks start start with the given name fragment.<br/>
+	Checks that are not accessible for the current user are not included in the result list.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>node - numeric, id of a node for single packagelist of a selected node</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&nodeid=1</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listChecksByName' \
+\
+         -d 'name=test' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"role":"admin",
+		"checks":[
+			{
+				"id":"2",
+				"user_id":"1",
+				"check_type":"3",
+				"check_name":"test.example.com",
+				"cinterval":"5",
+				"is_active":"1",
+				"locations":"",
+				"json":"{\"checkname\":\"linuxldap1.rrze.uni-erlangen.de\",\"interval\":\"5\",\"tags\":\"ldap\",\"accessgroup\":\"ZS-Server\",\"checktype\":\"3\",\"param\":[\"-H|##|linuxldap1.rrze.uni-erlangen.de\",\"-p|##|389\"],\"contacts\":[\"3\"],\"notifydown\":\"5\",\"notifyagain\":\"0\",\"notifyflap\":\"0\",\"notifyifup\":\"1\",\"command\":\"check_tcp\",\"user_id\":\"2\"}",
+				"luptime":"N\/A",
+				"accessgroup":"Test-Server",
+				"check_desc_name":"TCP",
+				"username":"admin"
+			}
+		],
+		"status":"ok"
+	}
+</pre></div>
+
 
 
 

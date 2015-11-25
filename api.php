@@ -207,6 +207,14 @@ switch($method)
 		api_deleteNode($_REQUEST['nodeid'])	;
 		break;
 	
+	case "listChecksByName":
+		if(!isset($_REQUEST['name']))
+		{
+			badrequest("name parameter is required");	
+		}
+		api_listChecksByName($_REQUEST['name'])	;
+		break;
+		
 	case "editNode":
 		if($user->userrole != "admin" && $user->userrole != "userext")
 		{
@@ -957,6 +965,50 @@ function api_editNode($nodeid,$hostname,$port,$interval,$groupname,$viahost,$aut
 	}		
 }
 
+function api_listChecksByName($name)
+{
+	global $db;
+	global $user;
+	
+	
+	$tpl['role'] = $user->userrole; // used role
+	
+	
+	$name = $db->real_escape_string($name);
+	
+	if($user->userrole == "admin")
+	{
+		$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE lower(service_checks.check_name) like lower('$name%')");
+	}
+	else
+	{
+		if($user->userrole == "userext")
+		{
+			$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE service_checks.user_id = '$user->id' AND lower(service_checks.check_name) like lower('$name%')");
+		}
+		else
+		{
+			$usql = getUserGroupsSQL(false,"service_checks.","accessgroup");
+			$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE (service_checks.user_id = '$user->id' OR ($usql)) AND lower(service_checks.check_name) like lower('$name%')");
+			//echo "SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id WHERE service_checks.user_id = '$_SESSION[user_id]' OR ($usql)";
+		}
+	
+	}
+	if($db->affected_rows < 1)
+	{
+		notFound("no results");
+	}
+	
+	$tpl['checks'] = array();
+	while($entry = $result->fetch_object())
+	{
+		$tpl['checks'][] = $entry;
+	}
+	
+	$tpl['status'] = "ok";
+	echo json_encode($tpl);
+}
+
 function api_deleteNode($nodeid)
 {
 	
@@ -1377,6 +1429,7 @@ function api_listNode($nid)
 	
 	echo json_encode($r);
 }
+
 
 
 function api_listNodes($search=false)
