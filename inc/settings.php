@@ -7,7 +7,7 @@ define("PROTO","http");
 
 // MYSQL!
 define("MYSQL_HOST","127.0.0.1");
-define("MYSQL_USER","changeme");
+define("MYSQL_USER","muninmx");
 define("MYSQL_PASS","changeme");
 define("MYSQL_DB","muninmx");
 
