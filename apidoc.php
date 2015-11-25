@@ -850,7 +850,7 @@ if(!isLoggedIn())
 				"cinterval":"5",
 				"is_active":"1",
 				"locations":"",
-				"json":"{\"checkname\":\"linuxldap1.rrze.uni-erlangen.de\",\"interval\":\"5\",\"tags\":\"ldap\",\"accessgroup\":\"ZS-Server\",\"checktype\":\"3\",\"param\":[\"-H|##|linuxldap1.rrze.uni-erlangen.de\",\"-p|##|389\"],\"contacts\":[\"3\"],\"notifydown\":\"5\",\"notifyagain\":\"0\",\"notifyflap\":\"0\",\"notifyifup\":\"1\",\"command\":\"check_tcp\",\"user_id\":\"2\"}",
+				"json":"{\"checkname\":\"test.example.com\",\"interval\":\"5\",\"tags\":\"ldap\",\"accessgroup\":\"Test-Server\",\"checktype\":\"3\",\"param\":[\"-H|##|test.example.com\",\"-p|##|389\"],\"contacts\":[\"3\"],\"notifydown\":\"5\",\"notifyagain\":\"0\",\"notifyflap\":\"0\",\"notifyifup\":\"1\",\"command\":\"check_tcp\",\"user_id\":\"2\"}",
 				"luptime":"N\/A",
 				"accessgroup":"Test-Server",
 				"check_desc_name":"TCP",
