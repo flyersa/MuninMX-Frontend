@@ -3,7 +3,8 @@
 define("MAINTAINANCE",0);
 
 // PROTO, important, wether the frontend is running in a http or https configuration.
-define("PROTO","http");
+//define("PROTO","http");
+define("PROTO",$_SERVER["REQUEST_SCHEME"]);
 
 // MYSQL!
 define("MYSQL_HOST","127.0.0.1");
@@ -59,7 +60,7 @@ define("COLLECTOR_PRIMARY_IP",$_SERVER['SERVER_ADDR']);
 define("OPERATOR_URL","http://www.muninmx.com");
 define("OPERATOR_NAME","MuninMX.com");
 
-define("BASEURL",PROTO."://".$_SERVER['SERVER_ADDR']);
+define("BASEURL",PROTO."://".$_SERVER['HTTP_HOST']);
 
 define("MAIL_ADDR","no-reply@muninmx.com");
 
