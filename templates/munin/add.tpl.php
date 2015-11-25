@@ -21,7 +21,7 @@ if(trim($user->apikey) == "" )
 													<div class="form-group">
 														<label class="col-md-2 control-label">Hostname</label>
 														<div class="col-md-10">
-															<input class="form-control" name="hostname" placeholder="Valid Hostname or IP" type="text" value="<?php echo $_POST['hostname']?>">
+															<input class="form-control" name="hostname" placeholder="Valid Hostname or IP" type="text" value="<?php echo (isset($_POST['hostname'])?$_POST['hostname']:'') ?>">
 														</div>
 													</div>
 												</fieldset>
@@ -41,7 +41,7 @@ if(trim($user->apikey) == "" )
 													<div class="form-group">
 														<label class="col-md-2 control-label">Port</label>
 														<div class="col-md-10">
-															<input class="form-control" name="port" placeholder="Munin Port" type="text" value="<?php echo $_POST['port']?>">
+															<input class="form-control" name="port" placeholder="Munin Port" type="text" value="<?php echo (isset($_POST['port'])?$_POST['port']:'')?>">
 														</div>
 													</div>	
 												</fieldset>	
@@ -49,7 +49,7 @@ if(trim($user->apikey) == "" )
 													<div class="form-group">
 														<label class="col-md-2 control-label">Optional Auth Password</label>
 														<div class="col-md-10">
-															<input class="form-control" name="authpw" placeholder="Leave empty for none" type="text" value="<?php echo $_POST['authpw']?>">
+															<input class="form-control" name="authpw" placeholder="Leave empty for none" type="text" value="<?php echo (isset($_POST['authpw'])?$_POST['authpw']:'') ?>">
 															<div class="note">
 															<strong>Info:</strong> If a Auth Password is set the MuninMX collector will authenticate against a pseudo plugin before loading plugins. Leave empty if unsure
 															</div>															
@@ -75,7 +75,7 @@ if(trim($user->apikey) == "" )
 													<div class="form-group">
 														<label class="col-md-2 control-label">Group</label>
 														<div class="col-md-10">
-															<input class="form-control" placeholder="Groupname" name="groupname" value="<?php echo $_POST['groupname']?>" type="text" data-autocomplete='[<?php echo getAutoCompleteGroups()?>]'>
+															<input class="form-control" placeholder="Groupname" name="groupname" value="<?php echo (isset($_POST['groupname'])?$_POST['groupname']:'' )?>" type="text" data-autocomplete='[<?php echo getAutoCompleteGroups()?>]'>
 														</div>
 													</div>	
 												</fieldset>														

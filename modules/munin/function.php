@@ -116,6 +116,7 @@ function getAutoCompleteGroups()
 		$result = $db->query("SELECT groupname FROM nodes WHERE user_id = $_SESSION[user_id] GROUP BY groupname ORDER BY groupname");
 	}
 	
+	$r = '';
 	while($tpl = $result->fetch_object())
 	{
 		$r.= '"'.$tpl->groupname.'",';
