@@ -4,6 +4,7 @@ function trackPkgDataAvailable()
 {
 	// connect
 	global $m;
+	if (!$m) return false; // no mongodb connection
 	
 	//$node = getNode($host);
 	
@@ -40,6 +41,7 @@ function dataAvailable($host,$plugin)
 {
 	// connect
 	global $m;
+	if (!$m) return false; // no mongodb connection
 	
 	$node = getNode($host);
 	
@@ -77,7 +79,8 @@ function getChartDataArray($host,$plugin,$graph,$timeframe=false,$startt=false,$
 {
 	// connect
 	global $m;
-	
+	if (!$m) new SplFixedArray(0); // no mongodb connection
+
 	$node = getNode($host);
 	
 	// select a database
