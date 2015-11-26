@@ -500,12 +500,13 @@ function api_listAlertsByNode($nodeid)
 	
 	echo json_encode($r);
 }
-
+/*
 function api_getAlert($alertid)
 {
 	global $user;
 	global $db;
 
+	
 	// TODO
 }
 
@@ -524,7 +525,7 @@ function api_deleteNotification($alertid, $contactid)
 
 	// TODO
 }
-
+*/
 
 
 
