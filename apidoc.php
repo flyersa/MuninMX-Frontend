@@ -13,7 +13,6 @@ if(!isLoggedIn())
 		$tpl->title = APP_NAME . " - API Documentation"; 
 		include("templates/core/head.tpl.php"); 
 	?>
-	<?php //include("templates/core/scripts.tpl.php"); ?>
 	
 	</head>
 	<body <?php if(isset($_SESSION['minify']) && $_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
@@ -102,38 +101,6 @@ if(!isLoggedIn())
 											<li><a id="h1-methods" href="#h1-methods">API Methods</a></li>
 											<ul id="toc-h2">
 												
-												<script>
-												/*
-													$(function(){
-														var $h2toc = $('#toc-h2');
-														$.each($('a[name^="h2-"]'), function(index, e) {
-															$e = $(e);
-															var content = $e.parent().text();
-															var name = $e.attr('name');
-															$h2toc.append('<li style="display:none;"><a href="#'+name+'">'+content+'</a></li>');
-														});
-														 
-														$('a#h1-methods').on('click', function() {
-															if ($h2toc.attr('data-state') != 'open') { 
-																$h2toc.find('li').slideDown(250, function() {
-																	$h2toc.attr('data-state', 'open');
-																});
-															}
-															else {
-																$h2toc.find('li').slideUp(250, function() {
-																	$h2toc.attr('data-state', 'closed');
-																});
-															}
-															return false
-														});
-													});
-													*/
-												</script>
-													<li>Plugins</li>
-													<ul>
-														<li style=""><a href="#h2-reloadPlugins">reloadPlugins</a></li>
-													</ul>
-												
 													<li>Roles</li>
 													<ul>
 														<li style=""><a href="#h2-getRole">getRole</a></li>
@@ -148,6 +115,8 @@ if(!isLoggedIn())
 													<li style=""><a href="#h2-listNodesByGroup">listNodesByGroup</a></li>
 													<li style=""><a href="#h2-editNode">editNode</a></li>
 													<li style=""><a href="#h2-deleteNode">deleteNode</a></li>
+													<li style=""><a href="#h2-reloadPlugins">reloadPlugins</a></li>
+													<li style=""><a href="#h2-packageList">packageList</a></li>
 													</ul>
 													
 													<li>Data</li>
@@ -165,14 +134,16 @@ if(!isLoggedIn())
 														<li style=""><a href="#h2-deleteBucket">deleteBucket</a></li>
 													</ul>
 													
-													<li>Packages</li>
-													<ul>
-														<li style=""><a href="#h2-packageList">packageList</a></li>
-													</ul>
-													
 													<li>Events</li>
 													<ul>
 														<li style=""><a href="#h2-addEvent">addEvent</a></li>
+													</ul>
+													
+													<li>Alerts</li>
+													<ul>
+														<li style=""><a href="#h2-addAlert">addAlert</a></li>
+														<li style=""><a href="#h2-listAlertsByNode">listAlertsByNode</a></li>
+														<li style=""><a href="#h2-deleteAlert">deleteAlert</a></li>
 													</ul>
 													
 													<li>Checks</li>
@@ -183,33 +154,6 @@ if(!isLoggedIn())
 														<li style=""><a href="#h2-deleteCheck">addCheck</a></li>
 													</ul>										
 											
-												<script>
-												/*
-													$(function(){
-														var $h2toc = $('#toc-h2');
-														$.each($('a[name^="h2-"]'), function(index, e) {
-															$e = $(e);
-															var content = $e.parent().text();
-															var name = $e.attr('name');
-															$h2toc.append('<li style="display:none;"><a href="#'+name+'">'+content+'</a></li>');
-														});
-														 
-														$('a#h1-methods').on('click', function() {
-															if ($h2toc.attr('data-state') != 'open') { 
-																$h2toc.find('li').slideDown(250, function() {
-																	$h2toc.attr('data-state', 'open');
-																});
-															}
-															else {
-																$h2toc.find('li').slideUp(250, function() {
-																	$h2toc.attr('data-state', 'closed');
-																});
-															}
-															return false
-														});
-													});
-													*/
-												</script>
 											</ul>
 										
 										</ul>
@@ -883,7 +827,6 @@ if(!isLoggedIn())
 <p>Example Response:</p>
 <div class="codehilite"><pre>
 	{
-		"role":"admin",
 		"checks":[
 			{
 				"id":"2",
@@ -921,7 +864,7 @@ if(!isLoggedIn())
 <li>name - string, prefix for a check name</li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&nodeid=1</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&name=test</span>
 </pre></div>
 
 <div class="codehilite"><pre><span class="x">curl -i -X POST \
@@ -935,7 +878,6 @@ if(!isLoggedIn())
 <p>Example Response:</p>
 <div class="codehilite"><pre>
 	{
-		"role":"admin",
 		"checks":[
 			{
 				"id":"2",
@@ -971,24 +913,176 @@ if(!isLoggedIn())
 <li>checkid - numeric, id of a check</li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&nodeid=1</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&checkid=99999</span>
 </pre></div>
 
 <div class="codehilite"><pre><span class="x">curl -i -X POST \
          -d 'key=<?php echo $user->apikey?>' \
          -d 'method=deleteCheck' \
 \
-         -d 'id=999999999' \
+         -d 'checkid=99999' \
 <?php echo BASEURL; ?>/api.php ; echo</span>
 </pre></div>
 
 <p>Example Response:</p>
 <div class="codehilite"><pre>
 	{
-		"role":"admin",
 		"status":"ok"
 	}
 </pre></div>
+
+
+
+
+
+
+<hr>
+<h2 id="markdown-header-editnode"><a name="h2-addAlert"></a>addAlert</h2>
+<p>
+	Adds a new alert.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>nodeid - numeric, id of the node the alert should be added to</li>
+<li>pluginname - string, name of the munin plugin</li>
+<li>graphname - string, name of the munin graph</li>
+<li>raisevalue - numeric, alert if this value is met with the alert condition</li>
+<li>condition - string, one of</li>
+	<ul>
+		<li>eq - equal</li>
+		<li>gt - greater than</li>
+		<li>lt - less than</li>
+		<li>gtavg - greater than average</li>
+		<li>ltavg - less than average</li>
+	</ul>
+<li>samples - numeric, number of samples/munin-runs for average calculation (only when condition is one of gtavg or ltavg)</li>
+<li>limit - numeric, a time to wait before resending an alert in case the condition still matches (minutes)</li>
+<li>contacts - numeric (csv), a comma-seperated list of contact ids to be notified</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addAlert&nodeid=99999&pluginname=load&graphname=load&raisevalue=8&condition=gtavg&samples=15&limit=120&contacts=999,888</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addAlert' \
+\
+         -d 'nodeid=99999' \
+         -d 'pluginname=load' \
+         -d 'graphname=load' \
+         -d 'raisevalue=8' \
+         -d 'condition=gtavg' \
+         -d 'samples=15' \
+         -d 'limit=120' \
+         -d 'contacts=999,888' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"msg":"Alert stored and added to running configuration.",
+		"id":520
+	}
+</pre></div>
+
+
+
+
+
+<hr>
+<h2 id="markdown-header-editnode"><a name="h2-deleteAlert"></a>deleteAlert</h2>
+<p>
+	Deletes an alert.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteAlert&alertid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteAlert' \
+\
+         -d 'alertid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"msg": "Alert removed and purged from running configuration."
+	}
+</pre></div>
+
+
+
+
+
+
+<hr>
+<h2 id="markdown-header-editnode"><a name="h2-listAlertsByNode"></a>listAlertsByNode</h2>
+<p>
+	Returns a list of all configured alerts for the given node.<br/>
+	Alerts that are not accessible for the current user are not returned.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>nodeid - numeric, id of the node</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listAlertsByNode&nodeid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listAlertsByNode' \
+\
+         -d 'nodeid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	[
+		{
+			"id":"117",
+			"user_id":"2",
+			"node_id":"113",
+			"pluginname":"df",
+			"graphname":"_dev_mapper_system_root",
+			"raise_value":"95",
+			"condition":"gt",
+			"alert_limit":"1440",
+			"num_samples":"2",
+			"hostname":"test.example.com"
+		},
+		{
+			"id":"353",
+			"user_id":"2",
+			"node_id":"113",
+			"pluginname":"load",
+			"graphname":"load",
+			"raise_value":"4",
+			"condition":"gtavg",
+			"alert_limit":"120",
+			"num_samples":"15",
+			"hostname":"test.example.com"
+		}
+	]
+</pre></div>
+
+
+
+
 
 
 

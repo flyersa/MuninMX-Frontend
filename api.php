@@ -297,6 +297,64 @@ switch($method)
 		api_addCheck();
 	break;
 		
+	
+	case "addAlert":
+		if(!is_numeric($_REQUEST['nodeid']))
+		{
+			badrequest("nodeid parameter is required");
+		}
+		if(!isset($_REQUEST['pluginname']))
+		{
+			badrequest("pluginname parameter is required");
+		}
+		if(!isset($_REQUEST['graphname']))
+		{
+			badrequest("graphname parameter is required");
+		}
+		if(!is_numeric($_REQUEST['raisevalue']))
+		{
+			badrequest("raisevalue parameter is required");
+		}
+		if(!isset($_REQUEST['condition']))
+		{
+			badrequest("condition parameter is required");
+		}
+		if (!in_array($_REQUEST['condition'], array('lt','eq','gt','ltavg','gtavg'))) 
+		{
+			badrequest("condition parameter must be one of ('lt','eq','gt','ltavg','gtavg')!");
+		}
+		if(($_REQUEST['condition'] == 'ltavg' || $_REQUEST['condition'] == 'gtavg') && !is_numeric($_REQUEST['limit']))
+		{
+			badrequest("limit parameter is required when condition is one of ltavg or gtavg");
+		}
+		if(!is_numeric($_REQUEST['samples']))
+		{
+			badrequest("samples parameter is required");
+		}
+		if(!isset($_REQUEST['contacts']))
+		{
+			badrequest("contacts parameter is required");
+		}
+		api_addAlert($_REQUEST['nodeid'],$_REQUEST['pluginname'],$_REQUEST['graphname'],$_REQUEST['raisevalue'],$_REQUEST['condition'],$_REQUEST['limit'],$_REQUEST['samples'],$_REQUEST['contacts']);
+		break;
+	
+		case "deleteAlert":
+			if(!is_numeric($_REQUEST['alertid']))
+			{
+				badrequest("alertid parameter is required");
+			}
+			api_deleteAlert($_REQUEST['alertid']);
+		break;
+	
+		
+		case "listAlertsByNode":
+			if(!is_numeric($_REQUEST['nodeid']))
+			{
+				badrequest("nodeid parameter is required");
+			}
+			api_listAlertsByNode($_REQUEST['nodeid']);
+		break;
+		
 	default:
 		badrequest("unknown method specified");
 	
@@ -304,6 +362,172 @@ switch($method)
 
 }
 	
+function api_addAlert($nodeid, $pluginname, $graphname, $raisevalue, $condition, $limit, $samples, $contacts)
+{
+	global $user;
+	global $db;
+	
+	// escaping
+	$nodeid = $db->real_escape_string($nodeid);
+	$graphname = $db->real_escape_string($graphname);
+	$raisevalue = $db->real_escape_string($raisevalue);
+	$condition = $db->real_escape_string($condition);
+	$limit = $db->real_escape_string($limit);
+	$samples = $db->real_escape_string($samples);
+	
+	// check node access and get node object
+	if(!accessToNode($nodeid,$user->id)) forbidden("Access to node denied!");
+	$node = getNode($nodeid);
+	if (!$node)	notfound("Cannot find node for nodeid $nodeid");
+	
+	// get plugin object
+	$pluginname = $db->real_escape_string($pluginname);
+	$result = $db->query("SELECT id FROM node_plugins WHERE node_id = '$node->id' AND pluginname='$pluginname' $and");
+	if($db->affected_rows == 0) {
+		notfound("Cannot find plugin for nodeid $nodeid and pluginname $pluginname");
+	}
+	$pluginid = $result->fetch_object()->id;
+	
+	$plugin = getPlugin($nodeid, $pluginid);
+	if (!$plugin) 
+	{
+		badrequest("Cannot find pluginid $pluginid for node $nodeid");
+	}
+	
+	// add alert
+	$db->query("INSERT INTO alerts (user_id,node_id,pluginname,graphname,raise_value,`condition`,alert_limit,num_samples) VALUES (
+			'$user->id',
+			'$node->id',
+			'$plugin->pluginname',
+			'$graphname',
+			'$raisevalue',
+			'$condition',
+			'$limit',
+			'$samples')");
+		
+	if($db->affected_rows > 0)
+	{
+		$aid = $db->insert_id;
+		
+		$contactsList = explode(',', $contacts);
+		reset($contactsList);
+		foreach($contactsList as $contact)
+		{
+			$contact = $db->real_escape_string($contact);
+			$db->query("INSERT INTO alert_contacts (alert_id,contact_id) VALUES ('$aid','$contact')");
+		}
+		
+		// add to running configuration
+		$ret = file_get_contents("http://".MCD_HOST.":".MCD_PORT."/addalert/$aid");
+		if(trim($ret) != "true") {
+			// cleanup after error
+			$db->query("DELETE FROM alert_contacts WHERE alert_id = '$aid'");
+			$db->query("DELETE FROM alerts WHERE id = '$aid'");
+			
+			badrequest("Alert could be stored but unable to add to running config -- alert was removed again automatically.");
+		}
+		
+		$tpl->status = "ok";
+		$tpl->msg = "Alert stored and added to running configuration.";
+		$tpl->id = $aid;
+	}
+	else
+	{
+		badrequest("Unable to store alert information, try again later");
+	}
+	
+	echo json_encode($tpl);
+}
+
+function api_deleteAlert($alertid)
+{
+	global $user;
+	global $db;
+	
+	$a = getAlert($alertid);
+	if($a == false)
+	{
+		notfound("Alert not found");
+	}
+	else
+	{
+		if($user->userrole != "admin")
+		{
+			if($a->user_id != $user->id)
+			{
+				forbidden("Access to alert denied!");
+			}
+		}
+		$ret = file_get_contents("http://".MCD_HOST.":".MCD_PORT."/deletealert/$a->id");
+		if(trim($ret) != "true")
+		{
+			badrequest("Alert cannot be removed from running config. Please try again later");
+		}
+		
+		$db->query("DELETE FROM alerts WHERE id = $a->id");
+		
+		$tpl->status = "ok";
+		$tpl->msg = "Alert removed and purged from running configuration.";
+		echo json_encode($tpl);
+	}
+}
+
+function api_listAlertsByNode($nodeid)
+{
+
+	global $user;
+	global $db;
+
+	// escaping
+	$nodeid = $db->real_escape_string($nodeid);
+	
+	$node = getNode($nodeid);
+	if (!$node)	notfound("Cannot find node for nodeid $nodeid");
+	
+	$filter = " WHERE node_id = '$nodeid'";
+	
+	if($user->userrole != "admin")
+	{
+		$where = " AND alerts.user_id = '$user->id'";
+	}
+	$result = $db->query("SELECT alerts.*,nodes.hostname FROM alerts LEFT JOIN nodes ON alerts.node_id = nodes.id $filter $where");
+
+	$r = array();
+	while($entry = $result->fetch_object())
+	{
+		$r[] = $entry;
+	}
+	
+	echo json_encode($r);
+}
+
+function api_getAlert($alertid)
+{
+	global $user;
+	global $db;
+
+	// TODO
+}
+
+function api_addNotification($alertid, $contactid)
+{
+	global $user;
+	global $db;
+
+	// TODO
+}
+
+function api_deleteNotification($alertid, $contactid)
+{
+	global $user;
+	global $db;
+
+	// TODO
+}
+
+
+
+
 function api_addCheck() 
 {
 	global $user;
@@ -983,7 +1207,6 @@ function api_listChecksByName($name)
 	global $user;
 	
 	
-	$tpl['role'] = $user->userrole; // used role
 	$name = $db->real_escape_string($name);
 	
 	if($user->userrole == "admin"){
@@ -1020,7 +1243,6 @@ function api_listChecks()
 	global $user;
 
 
-	$tpl['role'] = $user->userrole; // used role
 
 	if($user->userrole == "admin"){
 		$result = $db->query("SELECT service_checks.*,check_types.check_name as check_desc_name,users.username FROM service_checks LEFT JOIN check_types ON service_checks.check_type = check_types.id INNER JOIN users ON service_checks.user_id = users.id");
@@ -1054,7 +1276,6 @@ function api_deleteCheck($checkid)
 	global $db;
 	global $user;
 	
-	$tpl['role'] = $user->userrole; // used role
 	$checkid = $db->real_escape_string($checkid);
 	
 	if($user->userrole == "admin"){
