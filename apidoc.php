@@ -157,6 +157,7 @@ if(!isLoggedIn())
 													<li>Notifications</li>
 													<ul>
 														<li style=""><a href="#h2-addAlertContact">addAlertContact</a></li>
+														<li style=""><a href="#h2-deleteAlertContact">deleteAlertContact</a></li>
 													</ul>
 													
 													<li>Checks</li>
