@@ -1093,7 +1093,8 @@ if(!isLoggedIn())
 			"condition":"gt",
 			"alert_limit":"1440",
 			"num_samples":"2",
-			"hostname":"test.example.com"
+			"hostname":"test.example.com",
+			"contacts":"1,2"
 		},
 		{
 			"id":"353",
@@ -1105,7 +1106,8 @@ if(!isLoggedIn())
 			"condition":"gtavg",
 			"alert_limit":"120",
 			"num_samples":"15",
-			"hostname":"test.example.com"
+			"hostname":"test.example.com",
+			"contacts":"1,2"
 		},
 		...
 	]
