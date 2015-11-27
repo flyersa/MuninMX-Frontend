@@ -294,6 +294,30 @@ switch($method)
 		break;
 		
 	case "addCheck":
+		if(!isset($_REQUEST['checkname']))
+		{
+			badrequest("checkname parameter is required");
+		}
+		if(!is_numeric($_REQUEST['interval']))
+		{
+			badrequest("interval parameter is required");
+		}
+		if(!is_numeric($_REQUEST['notifydown']))
+		{
+			badrequest("notifydown parameter is required");
+		}
+		if(!is_numeric($_REQUEST['notifyagain']))
+		{
+			badrequest("notifyagain parameter is required");
+		}
+		if(!is_numeric($_REQUEST['notifyifup']))
+		{
+			badrequest("notifyifup parameter is required");
+		}
+		if(!is_numeric($_REQUEST['checktype']))
+		{
+			badrequest("checktype parameter is required");
+		}
 		api_addCheck();
 	break;
 		
@@ -355,12 +379,380 @@ switch($method)
 			api_listAlertsByNode($_REQUEST['nodeid']);
 		break;
 		
+		case "getAlert":
+			if(!is_numeric($_REQUEST['alertid']))
+			{
+				badrequest("alertid parameter is required");
+			}
+			api_getAlert($_REQUEST['alertid']);
+		break;
+		
+		case "listContacts":
+			api_listContacts();
+		break;
+		
+		
+		case "addContact":
+			// errors
+			if(trim($_REQUEST['contact_mobile_nr']) == "")
+			{
+				if(isset($_REQUEST['sms_active']) || isset($_REQUEST['tts_active']))
+				{
+					badrequest("Phone Notifications activated but no valid mobile number given: contact_mobile_nr is required");
+				}
+			}
+				
+			if(trim($_REQUEST['contact_callback']) == "")
+			{
+				if(isset($_REQUEST['callback_active']))
+				{
+					badrequest("JSON Callback activated but no callback url set: contact_callback is required");
+				}
+			}
+				
+			if(trim($_REQUEST['pushover_key']) == "")
+			{
+				if(isset($_REQUEST['pushover_active']))
+				{
+					badrequest("Pushover activated but no user key set: pushover_key is required");
+				}
+			}
+				
+			if (!isset($_REQUEST['contact_name'])) {
+				badrequest("contact_name is required");
+			}
+			if (!isset($_REQUEST['contact_email'])) {
+				badrequest("contact_email is required");
+			}
+			
+			// schedule
+			$schedule = array("mon"=>"00:00;24:00", "tue"=>"00:00;24:00", "wed"=>"00:00;24:00", "thu"=>"00:00;24:00",
+					 "fri"=>"00:00;24:00", "sat"=>"00:00;24:00", "sun"=>"00:00;24:00");
+			
+			if(isset($_REQUEST['s_mon_none']) && filter_var($_REQUEST['s_mon_none'], FILTER_VALIDATE_BOOLEAN))	{
+				$schedule->mon = "disabled";
+			} else if (isset($_REQUEST['s_mon_from']) && isset($_REQUEST['s_mon_to'])) {
+				$schedule->mon = $_REQUEST['s_mon_from'].";".$_REQUEST['s_mon_to'];
+			}
+			
+			if(isset($_REQUEST['s_tue_none']) && filter_var($_REQUEST['s_tue_none'], FILTER_VALIDATE_BOOLEAN))	{
+				$schedule->tue = "disabled";
+			} else if (isset($_REQUEST['s_tue_from']) && isset($_REQUEST['s_tue_to'])) {
+				$schedule->tue = $_REQUEST['s_tue_from'].";".$_REQUEST['s_tue_to'];
+			}
+			
+			if(isset($_REQUEST['s_wed_none']) && filter_var($_REQUEST['s_wed_none'], FILTER_VALIDATE_BOOLEAN))	{
+				$schedule->wed = "disabled";
+			} else if (isset($_REQUEST['s_wed_from']) && isset($_REQUEST['s_wed_to'])) {
+				$schedule->wed = $_REQUEST['s_wed_from'].";".$_REQUEST['s_wed_to'];
+			}
+			
+			if(isset($_REQUEST['s_thu_none']) && filter_var($_REQUEST['s_thu_none'], FILTER_VALIDATE_BOOLEAN))	{
+				$schedule->thu = "disabled";
+			} else if (isset($_REQUEST['s_thu_from']) && isset($_REQUEST['s_thu_to'])) {
+				$schedule->thu = $_REQUEST['s_thu_from'].";".$_REQUEST['s_thu_to'];
+			}
+			
+			if(isset($_REQUEST['s_fri_none']) && filter_var($_REQUEST['s_fri_none'], FILTER_VALIDATE_BOOLEAN))	{
+				$schedule->fri = "disabled";
+			} else if (isset($_REQUEST['s_fri_from']) && isset($_REQUEST['s_fri_to'])) {
+				$schedule->fri = $_REQUEST['s_fri_from'].";".$_REQUEST['s_fri_to'];
+			}
+			
+			if(isset($_REQUEST['s_sat_none']) && filter_var($_REQUEST['s_sat_none'], FILTER_VALIDATE_BOOLEAN))	{
+				$schedule->sat = "disabled";
+			} else if (isset($_REQUEST['s_sat_from']) && isset($_REQUEST['s_sat_to'])) {
+				$schedule->sat = $_REQUEST['s_sat_from'].";".$_REQUEST['s_sat_to'];
+			}
+			
+			if(isset($_REQUEST['s_sun_none']) && filter_var($_REQUEST['s_sun_none'], FILTER_VALIDATE_BOOLEAN))	{
+				$schedule->sun = "disabled";
+			} else if (isset($_REQUEST['s_sun_from']) && isset($_REQUEST['s_sun_to'])) {
+				$schedule->sun = $_REQUEST['s_sun_from'].";".$_REQUEST['s_sun_to'];
+			}
+			
+			// mapping
+			$notifications = array("callback"=>0, "email"=>0, "sms"=>0, "tts"=>0, "pushover"=>0);
+			if(isset($_REQUEST['callback_active']) && filter_var($_REQUEST['callback_active'], FILTER_VALIDATE_BOOLEAN))
+			{
+				$notifications['callback'] = 1;
+			}
+			if(isset($_REQUEST['email_active']) && filter_var($_REQUEST['email_active'], FILTER_VALIDATE_BOOLEAN))
+			{
+				$notifications['email'] = 1;
+			}
+			if(isset($_REQUEST['sms_active']) && filter_var($_REQUEST['sms_active'], FILTER_VALIDATE_BOOLEAN))
+			{
+				$notifications['sms'] = 1;
+			}
+			if(isset($_REQUEST['tts_active']) && filter_var($_REQUEST['tts_active'], FILTER_VALIDATE_BOOLEAN))
+			{
+				$notifications['tts'] = 1;
+			}
+			if(isset($_REQUEST['pushover_active']) && filter_var($_REQUEST['pushover_active'], FILTER_VALIDATE_BOOLEAN))
+			{
+				$notifications['pushover'] = 1;
+			}
+			
+			// timezone
+			if (isset($_REQUEST['timezone'])) {
+				$timezone = $_REQUEST['timezone'];
+			}
+			else {
+				$timezone = "Europe/Berlin"; // Default
+			}
+			
+			api_addContact($_REQUEST['contact_name'],$_REQUEST['contact_email'],$_REQUEST['contact_mobile_nr'],$_REQUEST['contact_callback'],
+					$_REQUEST['pushover_key'],$timezone, $notifications, $schedule);
+		break;
+		
+		
+		case "deleteContact":
+			if(!is_numeric($_REQUEST['contactid']))
+			{
+				badrequest("contactid parameter is required");
+			}
+			api_deleteContact($_REQUEST['contactid']);
+		break;
+		
+		case "addAlertContact":
+			if(!is_numeric($_REQUEST['alertid']))
+			{
+				badrequest("alertid parameter is required");
+			}
+			if(!is_numeric($_REQUEST['contactid']))
+			{
+				badrequest("contactid parameter is required");
+			}
+			api_addAlertContact($_REQUEST['alertid'],$_REQUEST['contactid']);
+		break;
+		
+		case "deleteAlertContact":
+			if(!is_numeric($_REQUEST['alertid']))
+			{
+				badrequest("alertid parameter is required");
+			}
+			if(!is_numeric($_REQUEST['contactid']))
+			{
+				badrequest("contactid parameter is required");
+			}
+			api_deleteAlertContact($_REQUEST['alertid'],$_REQUEST['contactid']);
+			break;
+		
 	default:
 		badrequest("unknown method specified");
 	
 		
 
 }
+
+
+function api_addContact($name,$email,$mobile_nr,$callback,$pushover_key,$timezone,$notifications,$schedule)
+{
+	global $user;
+	global $db;
+
+	// escaping
+	$name = $db->real_escape_string($name);
+	$email = $db->real_escape_string($email); // TODO: check if email is valid
+	$mobile_nr = $db->real_escape_string($mobile_nr); // TODO: check if mobile number is valid
+	$callback = $db->real_escape_string($callback);  // TODO: check if url is valid
+	$pushover_key = $db->real_escape_string($pushover_key);  // TODO: check if key is valid
+	$timezone = $db->real_escape_string($timezone); // TODO: check if timezone is valid
+	
+	foreach($notifications as &$value) { $value = $db->real_escape_string($value); }
+	unset($value);
+	foreach($schedule as &$value) { $value = $db->real_escape_string($value); }
+	unset($value);
+	
+	// okey lets go
+	$db->query("INSERT INTO contacts (contact_name,contact_email,contact_mobile_nr, contact_callback, pushover_key, user_id, callback_active, email_active, sms_active, tts_active, pushover_active, s_mon,s_tue,s_wed,s_thu,s_fri,s_sat,s_sun,timezone)
+			VALUES (
+			'$name',
+			'$email',
+			'$mobile_nr',
+			'$callback',
+			'$pushover_key',
+			'$user->id',
+			'$notifications->callback',
+			'$notifications->email',
+			'$notifications->sms',
+			'$notifications->tts',
+			'$notifications->pushover',
+			'$schedule->mon',
+			'$schedule->tue',
+			'$schedule->wed',
+			'$schedule->thu',
+			'$schedule->fri',
+			'$schedule->sat',
+			'$schedule->sun',
+			'$timezone')");
+		
+		
+	if($db->affected_rows > 0)
+	{
+		$cid = $db->insert_id;
+		
+		$tpl->status = "ok";
+		$tpl->message = "Contact '$name' created.";
+		$tpl->id = $cid;
+
+		echo json_encode($tpl);
+	}
+	else
+	{
+		badrequest("There was a issue with the database operation. Please try again later or contact support if the problem persist");
+	}
+}
+
+function api_deleteContact($contactid)
+{
+	global $user;
+	global $db;
+
+	// escaping
+	$contactid = $db->real_escape_string($contactid);
+	
+	$contact = returnContact($contactid);
+	if($contact == false)
+	{
+		notfound("Cannot find contact for contactid $contactid");
+	}
+	if($user->userrole != "admin")
+	{
+		if($contact->user_id != $user->id)
+		{
+			forbidden("Access to contact denied!");
+		}
+	}
+	// delete or just view
+	$db->query("DELETE FROM contacts WHERE id = '$contact->id'");
+	if($db->affected_rows < 1 )
+	{
+		badrequest("Cannot delete contact. Try again later");
+	}
+	else
+	{
+		$tpl->status = "ok";
+		$tpl->message = "Contact with contactid $contact->id deleted.";
+		echo json_encode($tpl);
+	}
+}
+
+function api_addAlertContact($alertid, $contactid)
+{
+	global $user;
+	global $db;
+	
+	// escaping
+	$alertid = $db->real_escape_string($alertid);
+	$contactid = $db->real_escape_string($contactid);
+	
+	$a = getAlert($alertid);
+	if($a == false)
+	{
+		notfound("Alert with alertid $alertid not found");
+	}
+	else
+	{
+		if($user->userrole != "admin")
+		{
+			if($a->user_id != $user->id)
+			{
+				forbidden("Access to alert denied!");
+			}
+		}
+		
+		$c = getContact($contactid);
+		if ($c == false) 
+		{
+			notfound("Contact with contactid $contactid not found");
+		}
+		else {
+			if($user->userrole != "admin")
+			{
+				if($c->user_id != $user->id)
+				{
+					forbidden("The contact with contactid $c->id does not belong to your account!");
+				}
+			}
+			
+			$db->query("INSERT INTO alert_contacts (alert_id,contact_id) VALUES ('$a->id','$c->id')");
+			
+			$ret = file_get_contents("http://".MCD_HOST.":".MCD_PORT."/deletealert/$a->id");
+			sleep(1);
+			$ret = file_get_contents("http://".MCD_HOST.":".MCD_PORT."/addalert/$a->id");
+			if(trim($ret) != "true") {
+				$db->query("DELETE FROM alert_contacts WHERE alert_id = '$a->id' AND contact_id = '$c->id'");
+				
+				badrequest("Alert notification contact was added but unable to update running config -- notification was removed again automatically.");
+			}
+			
+			$tpl->status = "ok";
+			$tpl->msg = "Alert notification contact added and running configuration updated.";
+			echo json_encode($tpl);
+			
+		}
+	}
+}
+
+function api_deleteAlertContact($alertid, $contactid)
+{
+	global $user;
+	global $db;
+
+// escaping
+	$alertid = $db->real_escape_string($alertid);
+	$contactid = $db->real_escape_string($contactid);
+	
+	$a = getAlert($alertid);
+	if($a == false)
+	{
+		notfound("Alert with alertid $alertid not found");
+	}
+	else
+	{
+		if($user->userrole != "admin")
+		{
+			if($a->user_id != $user->id)
+			{
+				forbidden("Access to alert denied!");
+			}
+		}
+		
+		$c = getContact($contactid);
+		if ($c == false) 
+		{
+			notfound("Contact with contactid $contactid not found");
+		}
+		else {
+			if($user->userrole != "admin")
+			{
+				if($c->user_id != $user->id)
+				{
+					forbidden("The contact with contactid $c->id does not belong to your account!");
+				}
+			}
+			
+			$db->query("DELETE FROM alert_contacts WHERE alert_id = '$a->id' AND contact_id = '$c->id'");
+			
+			$ret = file_get_contents("http://".MCD_HOST.":".MCD_PORT."/deletealert/$a->id");
+			sleep(1);
+			$ret = file_get_contents("http://".MCD_HOST.":".MCD_PORT."/addalert/$a->id");
+			if(trim($ret) != "true") {
+				$db->query("INSERT INTO alert_contacts (alert_id,contact_id) VALUES ('$a->id','$c->id')");
+				
+				badrequest("Alert notification contact was removed but unable to update running config -- notification was added again automatically.");
+			}
+			
+			$tpl->status = "ok";
+			$tpl->msg = "Alert notification contact removed and running configuration updated.";
+			echo json_encode($tpl);
+			
+		}
+	}
+}
+
 	
 function api_addAlert($nodeid, $pluginname, $graphname, $raisevalue, $condition, $limit, $samples, $contacts)
 {
@@ -394,6 +786,30 @@ function api_addAlert($nodeid, $pluginname, $graphname, $raisevalue, $condition,
 		badrequest("Cannot find pluginid $pluginid for node $nodeid");
 	}
 	
+	// prepare contact data
+	$contactsList = explode(',', $contacts);
+	foreach($contactsList as &$contactid) { $contactid = $db->real_escape_string($contactid); } // escaping
+	unset($contactid);
+	
+	// contact security
+	foreach($contactsList as $contactid)
+	{
+		$c = getContact($contactid);
+		if ($c == false)
+		{
+			notfound("Contact with contactid $contactid not found");
+		}
+		else {
+			if($user->userrole != "admin")
+			{
+				if($c->user_id != $user->id)
+				{
+					forbidden("The contact with contactid $c->id does not belong to your account!");
+				}
+			}
+		}
+	}
+	
 	// add alert
 	$db->query("INSERT INTO alerts (user_id,node_id,pluginname,graphname,raise_value,`condition`,alert_limit,num_samples) VALUES (
 			'$user->id',
@@ -409,12 +825,10 @@ function api_addAlert($nodeid, $pluginname, $graphname, $raisevalue, $condition,
 	{
 		$aid = $db->insert_id;
 		
-		$contactsList = explode(',', $contacts);
-		reset($contactsList);
-		foreach($contactsList as $contact)
+		// add contacts
+		foreach($contactsList as $contactid)
 		{
-			$contact = $db->real_escape_string($contact);
-			$db->query("INSERT INTO alert_contacts (alert_id,contact_id) VALUES ('$aid','$contact')");
+			$db->query("INSERT INTO alert_contacts (alert_id,contact_id) VALUES ('$aid','$contactid')");
 		}
 		
 		// add to running configuration
@@ -492,6 +906,11 @@ function api_listAlertsByNode($nodeid)
 	}
 	$result = $db->query("SELECT alerts.*,nodes.hostname FROM alerts LEFT JOIN nodes ON alerts.node_id = nodes.id $filter $where");
 
+	if($db->affected_rows == 0)
+	{
+		notFound("alert not found");
+	}
+	
 	$r = array();
 	while($entry = $result->fetch_object())
 	{
@@ -500,32 +919,61 @@ function api_listAlertsByNode($nodeid)
 	
 	echo json_encode($r);
 }
-/*
+
+
 function api_getAlert($alertid)
 {
 	global $user;
 	global $db;
 
+	// escaping
+	$alertid = $db->real_escape_string($alertid);
 	
-	// TODO
+	$filter = " WHERE alerts.id = '$alertid'";
+	if($user->userrole != "admin")
+	{
+		$where = " AND alerts.user_id = '$user->id'";
+	}
+	$result = $db->query("SELECT alerts.*,nodes.hostname FROM alerts LEFT JOIN nodes ON alerts.node_id = nodes.id $filter $where");
+	
+	if($db->affected_rows == 0) 
+	{
+		notFound("alert not found");
+	}
+	
+	$entry = $result->fetch_object();
+	echo json_encode($entry);
 }
 
-function api_addNotification($alertid, $contactid)
+function api_listContacts()
 {
 	global $user;
 	global $db;
 
-	// TODO
+	if($user->userrole == "admin")
+	{
+		$result = $db->query("SELECT * FROM contacts");
+	}
+	else
+	{
+		$result = $db->query("SELECT * FROM contacts WHERE user_id = '$user->id'");
+	}
+	
+	$r = array();
+	while($tpl = $result->fetch_object()) 
+	{
+		$r[] = $tpl;
+	}
+		
+	echo json_encode($r);
 }
 
-function api_deleteNotification($alertid, $contactid)
-{
-	global $user;
-	global $db;
 
-	// TODO
-}
-*/
+
+
+
+
+
 
 
 
@@ -550,7 +998,9 @@ function api_addCheck()
 			
 			$params = array_merge ( array (), $_REQUEST );
 			$params ['command'] = $tpl->executable;
-			$json = postCheckToJson ( $params );
+			unset($params['key']);
+			unset($params['method']);
+			$json = postCheckToJson ( $params , $user->id );
 			
 			if (getCurrentCheckCount ( $user->id ) < $user->max_checks) {
 				//
@@ -559,19 +1009,14 @@ function api_addCheck()
 			}
 			
 			// check if choosen contacts belong to this user
-			$contact_err = false;
 			$contacts = explode ( ",", $PBJ ['contacts'] );
 			if ($user->userrole != "admin") {
 				if (sizeof ( $contacts ) > 0) {
 					foreach ( $contacts as $contact ) {
 						$db->query ( "SELECT id FROM contacts WHERE user_id = '$user->id' AND id = '$contact'" );
 						if ($db->affected_rows < 1) {
-							$contact_err = true;
+							forbidden ( "Contact Mismatch at contactid $contact. You can only specify notify contacts that belong to your account." );
 						}
-					}
-					
-					if ($contact_err) {
-						forbidden ( "Contact Mismatch. You can only specify notify contacts that belong to your account" );
 					}
 				}
 			}
@@ -580,14 +1025,14 @@ function api_addCheck()
 			$escapedData = secureArray ( $_REQUEST );
 			$db->query ( "INSERT INTO service_checks (user_id,check_type,check_name,cinterval,json,accessgroup)
 				VALUES
-				($user->id,
-						$escapedData[checktype],
-					'$escapedData[checkname]',
-						$escapedData[interval],
+				(
+						'$user->id',
+						'$escapedData[checktype]',
+						'$escapedData[checkname]',
+						'$escapedData[interval]',
 						'$json',
 						'$escapedData[accessgroup]'
-				)
-				" );
+				)");
 			
 			$checkInsertId = $db->insert_id;
 			
@@ -607,15 +1052,14 @@ function api_addCheck()
 				
 				foreach ( $contacts as $contact ) {
 					$db->query ( "INSERT INTO notifications (contact_id,check_id,notifydown,notifyagain,notifyifup,notifyflap)
-		VALUES (
-		$contact,
-		$cid,
-		$escapedData[notifydown],
-		$escapedData[notifyagain],
-		$escapedData[notifyifup],
-				$escapedData[notifyflap]
-		)
-				" );
+								VALUES (
+									'$contact',
+									'$cid',
+									'$escapedData[notifydown]',
+									'$escapedData[notifyagain]',
+									'$escapedData[notifyifup]',
+									'$escapedData[notifyflap]'
+								)");
 				}
 				cvdQueueCheck ( $cid );
 			}

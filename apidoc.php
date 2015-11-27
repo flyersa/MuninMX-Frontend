@@ -119,6 +119,13 @@ if(!isLoggedIn())
 													<li style=""><a href="#h2-packageList">packageList</a></li>
 													</ul>
 													
+													<li>Contacts</li>
+													<ul>
+														<li style=""><a href="#h2-addContact">addContact</a></li>
+														<li style=""><a href="#h2-listContacts">listContacts</a></li>
+														<li style=""><a href="#h2-deleteContact">deleteContact</a></li>
+													</ul>
+													
 													<li>Data</li>
 													<ul>
 														<li style=""><a href="#h2-getChartData">getChartData</a></li>
@@ -142,8 +149,14 @@ if(!isLoggedIn())
 													<li>Alerts</li>
 													<ul>
 														<li style=""><a href="#h2-addAlert">addAlert</a></li>
+														<li style=""><a href="#h2-getAlert">getAlert</a></li>
 														<li style=""><a href="#h2-listAlertsByNode">listAlertsByNode</a></li>
 														<li style=""><a href="#h2-deleteAlert">deleteAlert</a></li>
+													</ul>
+													
+													<li>Notifications</li>
+													<ul>
+														<li style=""><a href="#h2-addAlertContact">addAlertContact</a></li>
 													</ul>
 													
 													<li>Checks</li>
@@ -151,7 +164,7 @@ if(!isLoggedIn())
 														<li style=""><a href="#h2-addCheck">addCheck</a></li>
 														<li style=""><a href="#h2-listChecks">listChecks</a></li>
 														<li style=""><a href="#h2-listChecksByName">listChecksByName</a></li>
-														<li style=""><a href="#h2-deleteCheck">addCheck</a></li>
+														<li style=""><a href="#h2-deleteCheck">deleteCheck</a></li>
 													</ul>										
 											
 											</ul>
@@ -606,7 +619,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-editNode"></a>editNode</h2>
+<h2><a name="h2-editNode"></a>editNode</h2>
 <p>all parameters optional and required from addNode are required. <strong>You also need to specify the nodeid (numeric) parameter</strong>:</p>
 <p>Required Parameters:</p>
 <ul>
@@ -632,7 +645,7 @@ if(!isLoggedIn())
 </section>
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-packageList"></a>packageList</h2>
+<h2><a name="h2-packageList"></a>packageList</h2>
 <p>Returns a list of all tracked packages.</p>
 
 <p>Optional Parameters</p>
@@ -667,7 +680,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-addEvent"></a>addEvent</h2>
+<h2><a name="h2-addEvent"></a>addEvent</h2>
 <p>Add a event to graphs.</p>
 
 <p>Required Parameters</p>
@@ -707,7 +720,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-addCheck"></a>addCheck</h2>
+<h2><a name="h2-addCheck"></a>addCheck</h2>
 <p>Add a check.</p>
 
 <p>Required Parameters</p>
@@ -743,7 +756,6 @@ if(!isLoggedIn())
 		</li>
 		</ul>
 </li>
-</ul>
 </ul>
 
 <p>Optional Parameters</p>
@@ -788,10 +800,25 @@ if(!isLoggedIn())
 		</ul>
 </li>
 </ul>
-</ul>
 
 <p>Example Request:</p>
 <div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addCheck&checkname=apitest1&checktype=1&interval=10&tags=apitag1,apitag2&notifydown=10&notifyagain=1&notifyifup=1&nonearg=127.0.0.1</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addCheck' \
+\
+         -d 'checkname=apitest1' \
+         -d 'checktype=1' \
+         -d 'interval=10' \
+         -d 'tags=apitag1,apitag2' \
+         -d 'notifydown=10' \
+         -d 'notifyagain=1' \
+         -d 'notifyifup=1' \
+         -d 'nonearg=127.0.0.1' \
+         -d 'contacts=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
 </pre></div>
 
 <p>Example Response:</p>
@@ -809,7 +836,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-listChecks"></a>listChecks</h2>
+<h2><a name="h2-listChecks"></a>listChecks</h2>
 <p>
 	Returns a list of all checks that are accessible for the current user.
 </p>
@@ -853,7 +880,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-listChecksByName"></a>listChecksByName</h2>
+<h2><a name="h2-listChecksByName"></a>listChecksByName</h2>
 <p>
 	Returns a list of all checks starting with the given name fragment.<br/>
 	Checks that are not accessible for the current user are not included in the result list.
@@ -902,7 +929,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-deleteCheck"></a>deleteCheck</h2>
+<h2><a name="h2-deleteCheck"></a>deleteCheck</h2>
 <p>
 	Deletes the check with the given checkId.<br/>
 	Checks that are not accessible for the current user cannot be deleted.
@@ -913,7 +940,7 @@ if(!isLoggedIn())
 <li>checkid - numeric, id of a check</li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&checkid=99999</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteCheck&checkid=99999</span>
 </pre></div>
 
 <div class="codehilite"><pre><span class="x">curl -i -X POST \
@@ -937,9 +964,11 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-addAlert"></a>addAlert</h2>
+<h2><a name="h2-addAlert"></a>addAlert</h2>
 <p>
-	Adds a new alert.
+	Adds a new alert.<br/>
+	You can only add alerts to nodes you are allowed access to.<br/>
+	You can only add contacts you are allowed access to.
 </p>
 
 <p>Mandatory Parameters</p>
@@ -993,7 +1022,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-deleteAlert"></a>deleteAlert</h2>
+<h2><a name="h2-deleteAlert"></a>deleteAlert</h2>
 <p>
 	Deletes an alert.
 </p>
@@ -1028,7 +1057,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode"><a name="h2-listAlertsByNode"></a>listAlertsByNode</h2>
+<h2><a name="h2-listAlertsByNode"></a>listAlertsByNode</h2>
 <p>
 	Returns a list of all configured alerts for the given node.<br/>
 	Alerts that are not accessible for the current user are not returned.
@@ -1076,8 +1105,244 @@ if(!isLoggedIn())
 			"alert_limit":"120",
 			"num_samples":"15",
 			"hostname":"test.example.com"
-		}
+		},
+		...
 	]
+</pre></div>
+
+
+
+<hr>
+<h2><a name="h2-getAlert"></a>getAlert</h2>
+<p>
+	Returns a map for the requested alert data.<br/>
+	Alerts that are not accessible for the current user are not returned.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=getAlert&alertid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=getAlert' \
+\
+         -d 'alertid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"id":"999999",
+		"user_id":"2",
+		"node_id":"252",
+		"pluginname":"load",
+		"graphname":"load",
+		"raise_value":"12",
+		"condition":"gtavg",
+		"alert_limit":"120",
+		"num_samples":"15",
+		"hostname":"test.example.com"
+	}
+</pre></div>
+
+
+
+<hr>
+<h2><a name="h2-listContacts"></a>listContacts</h2>
+<p>
+	Returns a list of contact entries.<br/>
+	Contacts that are not accessible for the current user are not returned.
+</p>
+
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listContacts</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listContacts' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	[
+		{
+			"id":"1",
+			"contact_name":"Test User",
+			"contact_email":"test.user@example.com",
+			"contact_username":"",
+			"contact_password":"",
+			"contact_mobile_nr":"",
+			"contact_code":"",
+			"contact_callback":"",
+			"contact_type":"basic",
+			"user_id":"2",
+			"callback_active":"0",
+			"email_active":"0",
+			"sms_active":"0",
+			"tts_active":"0",
+			"pushover_active":"1",
+			"app_active":"0",
+			"pushover_key":"abcdefghijklmnopqrstuvwxyz",
+			"s_mon":"08:00;22:00",
+			"s_tue":"08:00;22:00",
+			"s_wed":"08:00;22:00",
+			"s_thu":"08:00;22:00",
+			"s_fri":"08:00;22:00",
+			"s_sat":"10:00;20:00",
+			"s_sun":"10:00;20:00",
+			"timezone":"Europe\/Berlin"
+		},
+		...
+	]
+</pre></div>
+
+
+
+<hr>
+<h2><a name="h2-addContact"></a>addContact</h2>
+<p>
+	Adds a contact entry.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+	<li>contact_name - string, full name for the contact</li>
+	<li>contact_email - string, email address for the contact</li>
+</ul>
+
+<p>Optional Parameters</p>
+<ul>
+	<li>contact_mobile_nr - string, mobile phone number</li>
+	<ul>
+		<li>sms_active - boolean, activate sms notification (needs contact_mobile_nr)</li>
+		<li>tts_active - boolean, activate text-to-speech notification (needs contact_mobile_nr)</li>
+	</ul>
+	<li>contact_callback - string, callback URL</li>
+	<ul>
+		<li>callback_active - boolean, activate callback notification (needs contact_callback)</li>
+	</ul>
+	<li>pushover_key - string, pushover key</li>
+		<ul>
+		<li>pushover_active - boolean, activate pushover notification (needs pushover_key)</li>
+	</ul>
+	<li>timezone - string, defaults to 'Europe/Berlin'</li>
+</ul>
+
+
+<p>Optional Notification Schedule</p>
+<p>
+	For every weekday notifications can be disabled completely or configured for a specific time-period.<br/>
+	If omitted the schedule defaults to notifications 24/7.
+</p>
+<ul>
+	<li>monday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_mon_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_mon_from - string, start time for notifications in 24 hour format</li>
+		<li>s_mon_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>tuesday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_tue_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_tue_from - string, start time for notifications in 24 hour format</li>
+		<li>s_tue_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>wednesday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_wed_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_wed_from - string, start time for notifications in 24 hour format</li>
+		<li>s_wed_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>thursday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_thu_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_thu_from - string, start time for notifications in 24 hour format</li>
+		<li>s_thu_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>friday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_fri_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_fri_from - string, start time for notifications in 24 hour format</li>
+		<li>s_fri_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>saturday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_sat_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_sat_from - string, start time for notifications in 24 hour format</li>
+		<li>s_sat_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>sunday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_sun_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_sun_from - string, start time for notifications in 24 hour format</li>
+		<li>s_sun_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+</ul>
+
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addContact&contact_name=Test User&contact_email=test@example.com</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addContact' \
+\
+         -d 'contact_name=Test User' \
+         -d 'contact_email=test@example.com' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Contact 'Test User' created.",
+		"id":8
+	}
+</pre></div>
+
+
+
+
+
+
+<hr>
+<h2><a name="h2-deleteContact"></a>deleteContact</h2>
+<p>
+	Deletes the contact with the given contactid.<br/>
+	Contacts that are not accessible for the current user are not deleted.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>contactid - numeric, id of the contact</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteContact&contactid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteContact' \
+\
+         -d 'contactid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Contact with contactid 999999 deleted."
+	}
 </pre></div>
 
 
@@ -1086,6 +1351,77 @@ if(!isLoggedIn())
 
 
 
+<hr>
+<h2><a name="h2-addAlertContact"></a>addAlertContact</h2>
+<p>
+	Adds a notification contact to an alert.<br/>
+	Only alerts/contacts that are accessible by the current user are accessable.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+<li>contactid - numeric, id of the contact</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addAlertContact&alertid=999999&contactid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addAlertContact' \
+\
+         -d 'alertid=999999' \
+         -d 'contactid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Alert notification contact added and running configuration updated."
+	}
+</pre></div>
+   
+   
+   
+   
+   
+<hr>
+<h2><a name="h2-deleteAlertContact"></a>deleteAlertContact</h2>
+<p>
+	Deletes a notification contact from an alert.<br/>
+	Only alerts/contacts that are accessible by the current user are accessable.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+<li>contactid - numeric, id of the contact</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteAlertContact&alertid=999999&contactid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteAlertContact' \
+\
+         -d 'alertid=999999' \
+         -d 'contactid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Alert notification contact removed and running configuration updated."
+	}
+</pre></div>
+   
+   
     </section>
    
 

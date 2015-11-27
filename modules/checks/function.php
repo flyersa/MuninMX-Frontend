@@ -405,7 +405,7 @@ function getTagsForCheck($cid)
 	}	
 }
 
-function postCheckToJson($arr)
+function postCheckToJson($arr, $userid)
 {
 	
 	if(!isset($arr['param']))
@@ -465,7 +465,7 @@ function postCheckToJson($arr)
 		$i++;
 	}
 	
-	$arr['user_id'] = $_SESSION['user_id'];
+	$arr['user_id'] = $userid?$userid:$_SESSION['user_id'];
 	//print_r($far);
 	$arr['param'] = $far;
 	
