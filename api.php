@@ -574,18 +574,18 @@ function api_addContact($name,$email,$mobile_nr,$callback,$pushover_key,$timezon
 			'$callback',
 			'$pushover_key',
 			'$user->id',
-			'$notifications->callback',
-			'$notifications->email',
-			'$notifications->sms',
-			'$notifications->tts',
-			'$notifications->pushover',
-			'$schedule->mon',
-			'$schedule->tue',
-			'$schedule->wed',
-			'$schedule->thu',
-			'$schedule->fri',
-			'$schedule->sat',
-			'$schedule->sun',
+			'$notifications[callback]',
+			'$notifications[email]',
+			'$notifications[sms]',
+			'$notifications[tts]',
+			'$notifications[pushover]',
+			'$schedule[mon]',
+			'$schedule[tue]',
+			'$schedule[wed]',
+			'$schedule[thu]',
+			'$schedule[fri]',
+			'$schedule[sat]',
+			'$schedule[sun]',
 			'$timezone')");
 		
 		
@@ -593,6 +593,7 @@ function api_addContact($name,$email,$mobile_nr,$callback,$pushover_key,$timezon
 	{
 		$cid = $db->insert_id;
 		
+		$tpl = new stdClass();
 		$tpl->status = "ok";
 		$tpl->message = "Contact '$name' created.";
 		$tpl->id = $cid;
@@ -633,6 +634,7 @@ function api_deleteContact($contactid)
 	}
 	else
 	{
+		$tpl = new stdClass();
 		$tpl->status = "ok";
 		$tpl->message = "Contact with contactid $contact->id deleted.";
 		echo json_encode($tpl);
@@ -688,6 +690,7 @@ function api_addAlertContact($alertid, $contactid)
 				badrequest("Alert notification contact was added but unable to update running config -- notification was removed again automatically.");
 			}
 			
+			$tpl = new stdClass();
 			$tpl->status = "ok";
 			$tpl->msg = "Alert notification contact added and running configuration updated.";
 			echo json_encode($tpl);
@@ -745,6 +748,7 @@ function api_deleteAlertContact($alertid, $contactid)
 				badrequest("Alert notification contact was removed but unable to update running config -- notification was added again automatically.");
 			}
 			
+			$tpl = new stdClass();
 			$tpl->status = "ok";
 			$tpl->msg = "Alert notification contact removed and running configuration updated.";
 			echo json_encode($tpl);
@@ -841,6 +845,7 @@ function api_addAlert($nodeid, $pluginname, $graphname, $raisevalue, $condition,
 			badrequest("Alert could be stored but unable to add to running config -- alert was removed again automatically.");
 		}
 		
+		$tpl = new stdClass();
 		$tpl->status = "ok";
 		$tpl->msg = "Alert stored and added to running configuration.";
 		$tpl->id = $aid;
@@ -880,6 +885,7 @@ function api_deleteAlert($alertid)
 		
 		$db->query("DELETE FROM alerts WHERE id = $a->id");
 		
+		$tpl = new stdClass();
 		$tpl->status = "ok";
 		$tpl->msg = "Alert removed and purged from running configuration.";
 		echo json_encode($tpl);
@@ -967,14 +973,6 @@ function api_listContacts()
 		
 	echo json_encode($r);
 }
-
-
-
-
-
-
-
-
 
 
 function api_addCheck() 
@@ -1066,6 +1064,7 @@ function api_addCheck()
 		}
 	}
 	
+	$tpl = new stdClass();
 	$tpl->status = "ok";
 	$tpl->id = $checkInsertId;
 	$tpl->msg = "Check added.";
@@ -1340,6 +1339,7 @@ function api_getUsers()
 		forbidden("role admin is required. Your role: ".$user->userrole);
 	}	
 	$result = $db->query("SELECT * FROM users");
+	$r = array();
 	while($tpl = $result->fetch_object())
 	{
 		$r[] = $tpl;
@@ -2104,7 +2104,7 @@ function api_getChartData($nid,$plugin)
 	}
 	
 	$json  = json_decode(file_get_contents("http://".MCD_HOST.":".MCD_PORT."/node/$nid/fetch/$plugin"));
-	if(!$json)
+	if(!isset($json) || !$json)
 	{
 		notFound("Unable to locate node on MCD");
 	}
@@ -2163,6 +2163,7 @@ function api_listNode($nid)
 	$plugins = file_get_contents("http://".MCD_HOST.":".MCD_PORT."/node/".$node->id."/plugins");
 	$plugins = json_decode($plugins);
 	
+	$r = new stdClass();
 	$r->node = $node;
 	$r->plugins = $plugins;
 	
