@@ -937,7 +937,7 @@ function api_listAlertsByNode($nodeid)
 		{
 			$contacts[] = $centry->id;
 		}
-		$entry->contacts = implode( ',', $contacts);
+		$entry->contacts = $contacts;
 		
 		// add to result 
 		$r[] = $entry;
@@ -984,7 +984,7 @@ function api_getAlert($alertid)
 	{
 		$contacts[] = $centry->id;
 	}
-	$entry->contacts = implode( ',', $contacts);
+	$entry->contacts = $contacts;
 	
 	
 	

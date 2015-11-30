@@ -1094,7 +1094,7 @@ if(!isLoggedIn())
 			"alert_limit":"1440",
 			"num_samples":"2",
 			"hostname":"test.example.com",
-			"contacts":"1,2"
+			"contacts":[1,2]
 		},
 		{
 			"id":"353",
@@ -1107,7 +1107,7 @@ if(!isLoggedIn())
 			"alert_limit":"120",
 			"num_samples":"15",
 			"hostname":"test.example.com",
-			"contacts":"1,2"
+			"contacts":[1,2]
 		},
 		...
 	]
@@ -1151,7 +1151,7 @@ if(!isLoggedIn())
 		"alert_limit":"120",
 		"num_samples":"15",
 		"hostname":"test.example.com",
-		"contacts":"3,4",
+		"contacts": [3,4],
 	}
 </pre></div>
 
