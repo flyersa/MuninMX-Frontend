@@ -966,8 +966,28 @@ function api_getAlert($alertid)
 	{
 		notFound("alert not found");
 	}
-	
 	$entry = $result->fetch_object();
+	
+	// load associated notification contacts
+	$where = "";
+// 	if($user->userrole != "admin")
+// 	{
+// 		$where = "AND contacts.user_id = '$user->id'";
+// 	}
+	$cresult = $db->query("SELECT contacts.id
+			FROM alert_contacts LEFT JOIN contacts ON alert_contacts.contact_id = contacts.id
+			WHERE alert_contacts.alert_id = '$entry->id'
+			$where
+			");
+	$contacts = array();
+	while($centry = $cresult->fetch_object())
+	{
+		$contacts[] = $centry->id;
+	}
+	$entry->contacts = implode( ',', $contacts);
+	
+	
+	
 	echo json_encode($entry);
 }
 

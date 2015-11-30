@@ -1150,7 +1150,8 @@ if(!isLoggedIn())
 		"condition":"gtavg",
 		"alert_limit":"120",
 		"num_samples":"15",
-		"hostname":"test.example.com"
+		"hostname":"test.example.com",
+		"contacts":"3,4",
 	}
 </pre></div>
 
