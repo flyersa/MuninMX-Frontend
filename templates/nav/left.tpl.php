@@ -5,7 +5,7 @@
 					<a href="<?php if($_SESSION['role'] == "admin") { echo 'javascript:void(0);'; } else { echo 'settings.php';}?>">
 						<img src="img/avatars/noav.jpeg" alt="me" class="online" /> 
 						<span>
-							<?php echo htmlspecialchars($_SESSION[username])?> 
+							<?php echo htmlspecialchars($_SESSION['username'])?> 
 						</span>
 					</a> 
 					

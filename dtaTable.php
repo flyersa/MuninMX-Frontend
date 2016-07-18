@@ -124,7 +124,7 @@ list($iTotal) = $rResultTotal->fetch_row();
  * Output
  */
 $output = array(
-    "sEcho"                => intval($input['sEcho']),
+    "sEcho"                => isset($input['sEcho'])?intval($input['sEcho']):0,
     "iTotalRecords"        => $iTotal,
     "iTotalDisplayRecords" => $iFilteredTotal,
     "aaData"               => array(),

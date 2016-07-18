@@ -47,15 +47,22 @@ else
 }
 
 
-// open db
+// open mysql connection
 require_once("inc/db.php");
 global $db;
 $db = get_link();
 
 
-
+// open mongodb connection
 global $m;
-$m = new MongoClient( "mongodb://".MONGO_HOST );
+try {
+	$m = new MongoClient( "mongodb://".MONGO_HOST );
+}
+catch(Exception $e) {
+	// fail gracefully - this way the frontend is "usable" even without a running mongodb backend
+	//error_log("Cannot access mongodb backend: " . $e);
+}
+
 
 
 // load modules
@@ -83,7 +90,7 @@ if(isset($_COOKIE['scs_key']) && isset($_COOKIE['scs_user']))
   if($db->affected_rows > 0)  
   {
       $tpl = $result->fetch_object();
-      session_start();
+      if (session_id() == "") session_start();
 	  $_SESSION['login'] = true;
 	  $_SESSION['username'] = htmlspecialchars($tpl->username);
 	  $_SESSION['user_id'] = $tpl->id;
@@ -91,7 +98,7 @@ if(isset($_COOKIE['scs_key']) && isset($_COOKIE['scs_user']))
 	  $_SESSION['accessgroup'] = $tpl->accessgroup;
 	  setcookie("login", "yes");	
 	  setcookie("random",uniqid(microtime()));		
-      $path = $_SERVER['REDIRECT_URL'];       
+      $path = isset($_SERVER['REDIRECT_URL'])?$_SERVER['REDIRECT_URL']:'';       
       $uip = getUserIP();
       $db->query("UPDATE users SET last_login = NOW(), last_login_ip = '$uip' WHERE id = $tpl->id");
 	  

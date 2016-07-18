@@ -81,7 +81,7 @@
 		<script>
 			$(document).ready(function() {
 				// DO NOT REMOVE : GLOBAL FUNCTIONS!
-				<?php if(!$tpl->enablejarvis) { ?>
+				<?php if(!isset($tpl->enablejarvis) || !$tpl->enablejarvis) { ?>
 				$.enableJarvisWidgets = false;
 				<?php } ?>
 				pageSetUp();

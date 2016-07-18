@@ -9,9 +9,13 @@ if(!isLoggedIn())
 <!DOCTYPE html>
 <html lang="en-us">
 	<head>
-	<?php $tpl->title = APP_NAME . " - API Documentation"; include("templates/core/head.tpl.php"); ?>
+	<?php 
+		$tpl->title = APP_NAME . " - API Documentation"; 
+		include("templates/core/head.tpl.php"); 
+	?>
+	
 	</head>
-	<body <?php if($_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
+	<body <?php if(isset($_SESSION['minify']) && $_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
 
 		<!-- HEADER -->
 		<header id="header">
@@ -24,6 +28,11 @@ if(!isLoggedIn())
 		<?php include("templates/nav/left.tpl.php"); ?>
 		<!-- END NAVIGATION -->
 
+		
+		<?php
+			$user = getUserObject($_SESSION['user_id']);
+		?>
+		
 		<!-- MAIN PANEL -->
 		<div id="main" role="main">
 
@@ -52,11 +61,135 @@ if(!isLoggedIn())
 						<article class="col-sm-12">
 				
 							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-toc" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+					
+								<header>
+									<span class="widget-icon"> <i class="fa fa-align-justify"></i> </span>
+									<h2>MuninMX RESTful API - Table of contents</h2>
+								</header>
+								<!-- widget div-->
+								<style>
+									#toc-h2 {
+										height:200px;
+										/*-moz-column-count: 3;*/
+										/*-moz-column-gap: 20px;*/
+										/*-webkit-column-count: 3;*/
+										/*-webkit-column-gap: 20px;*/
+										/*column-count: 3;*/
+										/*column-gap: 20px;*/
+										-webkit-column-width: 200px; /* Chrome, Safari, Opera */
+										-moz-column-width: 200px; /* Firefox */
+    									column-width: 200px;
+    									-moz-column-fill: auto; /* Firefox */
+    									column-fill: auto;
+									}
+								</style>
+								<div>
+				
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+				
+									</div>
+									<!-- end widget edit box -->
+				
+									<!-- widget content -->
+									<div class="widget-body">
+										<ul>
+											<li><a href="#h1-basics">Basics</a></li>
+											
+											<li><a id="h1-methods" href="#h1-methods">API Methods</a></li>
+											<ul id="toc-h2">
+												
+													<li>Roles</li>
+													<ul>
+														<li style=""><a href="#h2-getRole">getRole</a></li>
+														<li style=""><a href="#h2-listGroups">listGroups</a></li>
+													</ul>
+													
+													<li>Nodes</li>
+													<ul>
+													<li style=""><a href="#h2-addNode">addNode</a></li>
+													<li style=""><a href="#h2-getNode">getNode</a></li>
+													<li style=""><a href="#h2-listNodes">listNodes</a></li>
+													<li style=""><a href="#h2-listNodesByGroup">listNodesByGroup</a></li>
+													<li style=""><a href="#h2-editNode">editNode</a></li>
+													<li style=""><a href="#h2-deleteNode">deleteNode</a></li>
+													<li style=""><a href="#h2-reloadPlugins">reloadPlugins</a></li>
+													<li style=""><a href="#h2-packageList">packageList</a></li>
+													</ul>
+													
+													<li>Contacts</li>
+													<ul>
+														<li style=""><a href="#h2-addContact">addContact</a></li>
+														<li style=""><a href="#h2-listContacts">listContacts</a></li>
+														<li style=""><a href="#h2-deleteContact">deleteContact</a></li>
+													</ul>
+													
+													<li>Data</li>
+													<ul>
+														<li style=""><a href="#h2-getChartData">getChartData</a></li>
+													</ul>
+													
+													<li>Buckets</li>
+													<ul>
+														<li style=""><a href="#h2-addBucket">addBucket</a></li>
+														<li style=""><a href="#h2-getBucket">getBucket</a></li>
+														<li style=""><a href="#h2-getBucketData">getBucketData</a></li>
+														<li style=""><a href="#h2-listBuckets">listBuckets</a></li>
+														<li style=""><a href="#h2-editBucket">editBucket</a></li>
+														<li style=""><a href="#h2-deleteBucket">deleteBucket</a></li>
+													</ul>
+													
+													<li>Events</li>
+													<ul>
+														<li style=""><a href="#h2-addEvent">addEvent</a></li>
+													</ul>
+													
+													<li>Alerts</li>
+													<ul>
+														<li style=""><a href="#h2-addAlert">addAlert</a></li>
+														<li style=""><a href="#h2-getAlert">getAlert</a></li>
+														<li style=""><a href="#h2-listAlertsByNode">listAlertsByNode</a></li>
+														<li style=""><a href="#h2-deleteAlert">deleteAlert</a></li>
+													</ul>
+													
+													<li>Notifications</li>
+													<ul>
+														<li style=""><a href="#h2-addAlertContact">addAlertContact</a></li>
+														<li style=""><a href="#h2-deleteAlertContact">deleteAlertContact</a></li>
+													</ul>
+													
+													<li>Checks</li>
+													<ul>
+														<li style=""><a href="#h2-addCheck">addCheck</a></li>
+														<li style=""><a href="#h2-listChecks">listChecks</a></li>
+														<li style=""><a href="#h2-listChecksByName">listChecksByName</a></li>
+														<li style=""><a href="#h2-deleteCheck">deleteCheck</a></li>
+													</ul>										
+											
+											</ul>
+										
+										</ul>
+									</div>
+								</div>
+							</div>
+						</article>
+				</div>
+				
+				
+				
+				<!-- row -->
+				<div class="row">
+						<!-- NEW WIDGET START -->
+						<article class="col-sm-12">
+				
+							<!-- Widget ID (each widget will need unique ID)-->
 							<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-x" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 					
 								<header>
 									<span class="widget-icon"> <i class="fa fa-align-justify"></i> </span>
-									<h2>MuninMX RESTful API Documentation </h2>
+									<h2>MuninMX RESTful API - Documentation </h2>
 								</header>
 								<!-- widget div-->
 								<div>
@@ -72,7 +205,7 @@ if(!isLoggedIn())
 									<div class="widget-body">
 
   <section id="wiki-content" class="wiki-content">
-      <h1 id="markdown-header-basics">Basics</h1>
+      <h1 id="markdown-header-basics"><a name="h1-basics"></a>Basics</h1>
       
 <h2 id="markdown-header-request-basics">Request Basics</h2>
 <p>You can use POST or GET to communicate with the MuninMX API. The parameters <strong>apikey</strong> and <strong>method</strong> must be given.</p>
@@ -99,12 +232,12 @@ if(!isLoggedIn())
 <hr>
 <h2 id="markdown-header-api-caching">API Caching</h2>
 <p>Please note that if you use GET that the API caches all results for 60 seconds. We recommend using GET for storage backend querys such as getChartData. </p>
-<h1 id="markdown-header-api-methods">API Methods</h1>
+<h1 id="markdown-header-api-methods"><a name="h1-methods"></a>API Methods</h1>
 <p>Some methods are only available to certain user roles (User Extended or Admin). You can see your user role status by using the getRole method.</p>
-<h2 id="markdown-header-getrole">getRole</h2>
+<h2 id="markdown-header-getrole"><a name="h2-getRole"></a>getRole</h2>
 <p>Will return your user role.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getRole</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getRole</span>
 </pre></div>
 
 
@@ -116,11 +249,11 @@ if(!isLoggedIn())
 <p>Valid Roles are: user, userext and admin</p>
 
 <hr>
-<h2 id="markdown-header-listnodes">listNodes</h2>
+<h2 id="markdown-header-listnodes"><a name="h2-listNodes"></a>listNodes</h2>
 <p>Will return a list of all your nodes.</p>
 <p>Optional Parameter: &amp;search=</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listNodes&amp;search=destiny</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listNodes&amp;search=destiny</span>
 </pre></div>
 
 
@@ -140,10 +273,10 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-getnode">getNode</h2>
+<h2 id="markdown-header-getnode"><a name="h2-getNode"></a>getNode</h2>
 <p>Will return all plugin and graph definitions from a node. <strong>nodeid parameter is required</strong></p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getNode&amp;nodeid=1509</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getNode&amp;nodeid=1509</span>
 </pre></div>
 
 
@@ -233,7 +366,7 @@ if(!isLoggedIn())
 <p><strong>Values in this call will only refresh every QueryInterval based contact to the node. To fetch plugin values from the storage backend you need to issue a getChartData call</strong></p>
 
 <hr>
-<h2 id="markdown-header-getchartdata">getChartData</h2>
+<h2 id="markdown-header-getchartdata"><a name="h2-getChartData"></a>getChartData</h2>
 <p>Will return graph values from the storage backend for a given plugin. <strong>nodeid and plugin parameter is required</strong></p>
 <p>Parameters:</p>
 <ul>
@@ -243,7 +376,7 @@ if(!isLoggedIn())
 <li>end  (integer, unixtimestamp, optional)</li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getChartData&amp;nodeid=1509&amp;plugin=cpu&amp;start=1404395178</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getChartData&amp;nodeid=1509&amp;plugin=cpu&amp;start=1404395178</span>
 </pre></div>
 
 
@@ -301,10 +434,10 @@ if(!isLoggedIn())
 <p>For label definitions of the single graph items per plugin you can use getNode</p>
 
 <hr>
-<h2 id="markdown-header-listbuckets">listBuckets</h2>
+<h2 id="markdown-header-listbuckets"><a name="h2-listBuckets"></a>listBuckets</h2>
 <p>returns a list of all your bucket stats</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listBuckets</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listBuckets</span>
 </pre></div>
 
 
@@ -324,11 +457,11 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-getbucket">getBucket</h2>
+<h2 id="markdown-header-getbucket"><a name="h2-getBucket"></a>getBucket</h2>
 <p>receive a single bucket. <strong>Required Parameter: bucketid (numeric)
 </strong></p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getBucket&amp;bucketid=4</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getBucket&amp;bucketid=4</span>
 </pre></div>
 
 
@@ -337,11 +470,11 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-getbucketdata">getBucketData</h2>
+<h2 id="markdown-header-getbucketdata"><a name="h2-getBucketData"></a>getBucketData</h2>
 <p>returns data from the storage backend for that bucket. **Required Parameter: bucketid (numeric)</p>
 <p>By default will only return the last 30/31 days. You can add <strong>start</strong> and <strong>end</strong> parameter (numeric) with a unixtimestamp for better range results.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=getBucketData&amp;bucketid=4&amp;start=1404463401</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=getBucketData&amp;bucketid=4&amp;start=1404463401</span>
 </pre></div>
 
 
@@ -363,10 +496,10 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-listgroups">listGroups</h2>
+<h2 id="markdown-header-listgroups"><a name="h2-listGroups"></a>listGroups</h2>
 <p>return all groups from nodes</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listGroups</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listGroups</span>
 </pre></div>
 
 
@@ -375,10 +508,10 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-listnodesbygroup">listNodesByGroup</h2>
+<h2 id="markdown-header-listnodesbygroup"><a name="h2-listNodesByGroup"></a>listNodesByGroup</h2>
 <p>return all nodes from a given group. <strong>group parameter (string) is required</strong></p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=listNodesByGroup&amp;group=clavain</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=listNodesByGroup&amp;group=clavain</span>
 </pre></div>
 
 
@@ -398,11 +531,11 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-addbucket">addBucket</h2>
+<h2 id="markdown-header-addbucket"><a name="h2-addBucket"></a>addBucket</h2>
 <p>create a new bucketstat</p>
 <p>graphname and graphlabel parameters are required. groupname parameter is optional.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=addBucket&amp;graphname=People%20in%20Room&amp;graphlabel=people</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=addBucket&amp;graphname=People%20in%20Room&amp;graphlabel=people</span>
 </pre></div>
 
 
@@ -411,11 +544,11 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editbucket">editBucket</h2>
+<h2 id="markdown-header-editbucket"><a name="h2-editBucket"></a>editBucket</h2>
 <p>edit a buckets name, label.</p>
 <p>bucketid, graphname and graphlabel are required. groupname is optional.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=editBucket&amp;bucketid=11&amp;graphname=humans%20in%20room&amp;graphlabel=humans</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=editBucket&amp;bucketid=11&amp;graphname=humans%20in%20room&amp;graphlabel=humans</span>
 </pre></div>
 
 
@@ -424,11 +557,11 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-deletebucket">deleteBucket</h2>
+<h2 id="markdown-header-deletebucket"><a name="h2-deleteBucket"></a>deleteBucket</h2>
 <p>delete a bucketstat.</p>
 <p>bucketid (numeric) is required</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=deleteBucket&amp;bucketid=11</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=deleteBucket&amp;bucketid=11</span>
 </pre></div>
 
 
@@ -437,11 +570,11 @@ if(!isLoggedIn())
 </pre></div>
 
 
-<h2 id="markdown-header-reloadplugins">reloadPlugins</h2>
+<h2 id="markdown-header-reloadplugins"><a name="h2-reloadPlugins"></a>reloadPlugins</h2>
 <p>will try to reload plugins for the given node. This is useful if you added a new munin plugin. Plugins are only refreshed for the cache once per day if you not refresh yourself.</p>
 <p>nodeid parameter (numeric) is reuqired.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=reloadPlugins&amp;nodeid=1509</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=reloadPlugins&amp;nodeid=1509</span>
 </pre></div>
 
 
@@ -450,7 +583,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-addnode">addNode</h2>
+<h2 id="markdown-header-addnode"><a name="h2-addNode"></a>addNode</h2>
 <p>add a new munin-node for monitoring.</p>
 <p>Required Parameters:</p>
 <ul>
@@ -465,7 +598,7 @@ if(!isLoggedIn())
 <li>authpw - string, required if you use muninmxauth plugin, only allow connection to munin node with proper password </li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=addNode&amp;hostname=clavain.com&amp;port=4949&amp;interval=10</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=addNode&amp;hostname=clavain.com&amp;port=4949&amp;interval=10</span>
 </pre></div>
 
 
@@ -474,11 +607,11 @@ if(!isLoggedIn())
 </pre></div>
 
 
-<h2 id="markdown-header-deletenode">deleteNode</h2>
+<h2 id="markdown-header-deletenode"><a name="h2-deleteNode"></a>deleteNode</h2>
 <p>delete a node from the system. dequeue from collector, remove plugin cache and delete all associated graph data.</p>
 <p>nodeid parameter is required.</p>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=deleteNode&amp;nodeid=1509</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&amp;method=deleteNode&amp;nodeid=1509</span>
 </pre></div>
 
 
@@ -487,7 +620,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editnode">editNode</h2>
+<h2><a name="h2-editNode"></a>editNode</h2>
 <p>all parameters optional and required from addNode are required. <strong>You also need to specify the nodeid (numeric) parameter</strong>:</p>
 <p>Required Parameters:</p>
 <ul>
@@ -502,7 +635,7 @@ if(!isLoggedIn())
 <li>authpw - string, required if you use muninmxauth plugin, only allow connection to munin node with proper password </li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&amp;method=editNode&amp;nodeid=1509&amp;hostname=destiny.clavain.com&amp;port=4949&amp;interval=5&amp;groupname=clavain</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=editNode&amp;nodeid=1509&amp;hostname=destiny.clavain.com&amp;port=4949&amp;interval=5&amp;groupname=clavain</span>
 </pre></div>
 
 
@@ -513,7 +646,7 @@ if(!isLoggedIn())
 </section>
 
 <hr>
-<h2 id="markdown-header-editnode">packageList</h2>
+<h2><a name="h2-packageList"></a>packageList</h2>
 <p>Returns a list of all tracked packages.</p>
 
 <p>Optional Parameters</p>
@@ -521,7 +654,7 @@ if(!isLoggedIn())
 <li>node - numeric, id of a node for single packagelist of a selected node</li>
 </ul>
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&method=packageList</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=packageList</span>
 </pre></div>
 
 
@@ -548,7 +681,7 @@ if(!isLoggedIn())
 </pre></div>
 
 <hr>
-<h2 id="markdown-header-editnode">addEvent</h2>
+<h2><a name="h2-addEvent"></a>addEvent</h2>
 <p>Add a event to graphs.</p>
 
 <p>Required Parameters</p>
@@ -568,7 +701,7 @@ if(!isLoggedIn())
 </ul>
 
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&method=addEvent&event_title=Nagios Alert&color=red&node=app01-myserver.example.com</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addEvent&event_title=Nagios Alert&color=red&node=app01-myserver.example.com</span>
 </pre></div>
 
 
@@ -588,7 +721,7 @@ if(!isLoggedIn())
 
 
 <hr>
-<h2 id="markdown-header-editnode">addCheck</h2>
+<h2><a name="h2-addCheck"></a>addCheck</h2>
 <p>Add a check.</p>
 
 <p>Required Parameters</p>
@@ -624,7 +757,6 @@ if(!isLoggedIn())
 		</li>
 		</ul>
 </li>
-</ul>
 </ul>
 
 <p>Optional Parameters</p>
@@ -669,10 +801,25 @@ if(!isLoggedIn())
 		</ul>
 </li>
 </ul>
-</ul>
 
 <p>Example Request:</p>
-<div class="codehilite"><pre><span class="x">api.php?key=45396454349494ddcx&method=addCheck&checkname=apitest1&checktype=1&interval=10&tags=apitag1,apitag2&notifydown=10&notifyagain=1&notifyifup=1&nonearg=127.0.0.1</span>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addCheck&checkname=apitest1&checktype=1&interval=10&tags=apitag1,apitag2&notifydown=10&notifyagain=1&notifyifup=1&nonearg=127.0.0.1</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addCheck' \
+\
+         -d 'checkname=apitest1' \
+         -d 'checktype=1' \
+         -d 'interval=10' \
+         -d 'tags=apitag1,apitag2' \
+         -d 'notifydown=10' \
+         -d 'notifyagain=1' \
+         -d 'notifyifup=1' \
+         -d 'nonearg=127.0.0.1' \
+         -d 'contacts=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
 </pre></div>
 
 <p>Example Response:</p>
@@ -689,7 +836,596 @@ if(!isLoggedIn())
 
 
 
+<hr>
+<h2><a name="h2-listChecks"></a>listChecks</h2>
+<p>
+	Returns a list of all checks that are accessible for the current user.
+</p>
 
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecks</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listChecks' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"checks":[
+			{
+				"id":"2",
+				"user_id":"1",
+				"check_type":"3",
+				"check_name":"test.example.com",
+				"cinterval":"5",
+				"is_active":"1",
+				"locations":"",
+				"json":"{\"checkname\":\"test.example.com\",\"interval\":\"5\",\"tags\":\"ldap\",\"accessgroup\":\"Test-Server\",\"checktype\":\"3\",\"param\":[\"-H|##|test.example.com\",\"-p|##|389\"],\"contacts\":[\"3\"],\"notifydown\":\"5\",\"notifyagain\":\"0\",\"notifyflap\":\"0\",\"notifyifup\":\"1\",\"command\":\"check_tcp\",\"user_id\":\"2\"}",
+				"luptime":"N\/A",
+				"accessgroup":"Test-Server",
+				"check_desc_name":"TCP",
+				"username":"admin"
+			},
+			...
+		],
+		"status":"ok"
+	}
+</pre></div>
+
+
+
+
+
+<hr>
+<h2><a name="h2-listChecksByName"></a>listChecksByName</h2>
+<p>
+	Returns a list of all checks starting with the given name fragment.<br/>
+	Checks that are not accessible for the current user are not included in the result list.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>name - string, prefix for a check name</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listChecksByName&name=test</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listChecksByName' \
+\
+         -d 'name=test' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"checks":[
+			{
+				"id":"2",
+				"user_id":"1",
+				"check_type":"3",
+				"check_name":"test.example.com",
+				"cinterval":"5",
+				"is_active":"1",
+				"locations":"",
+				"json":"{\"checkname\":\"test.example.com\",\"interval\":\"5\",\"tags\":\"ldap\",\"accessgroup\":\"Test-Server\",\"checktype\":\"3\",\"param\":[\"-H|##|test.example.com\",\"-p|##|389\"],\"contacts\":[\"3\"],\"notifydown\":\"5\",\"notifyagain\":\"0\",\"notifyflap\":\"0\",\"notifyifup\":\"1\",\"command\":\"check_tcp\",\"user_id\":\"2\"}",
+				"luptime":"N\/A",
+				"accessgroup":"Test-Server",
+				"check_desc_name":"TCP",
+				"username":"admin"
+			}
+		],
+		"status":"ok"
+	}
+</pre></div>
+
+
+
+
+<hr>
+<h2><a name="h2-deleteCheck"></a>deleteCheck</h2>
+<p>
+	Deletes the check with the given checkId.<br/>
+	Checks that are not accessible for the current user cannot be deleted.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>checkid - numeric, id of a check</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteCheck&checkid=99999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteCheck' \
+\
+         -d 'checkid=99999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok"
+	}
+</pre></div>
+
+
+
+
+
+
+<hr>
+<h2><a name="h2-addAlert"></a>addAlert</h2>
+<p>
+	Adds a new alert.<br/>
+	You can only add alerts to nodes you are allowed access to.<br/>
+	You can only add contacts you are allowed access to.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>nodeid - numeric, id of the node the alert should be added to</li>
+<li>pluginname - string, name of the munin plugin</li>
+<li>graphname - string, name of the munin graph</li>
+<li>raisevalue - numeric, alert if this value is met with the alert condition</li>
+<li>condition - string, one of</li>
+	<ul>
+		<li>eq - equal</li>
+		<li>gt - greater than</li>
+		<li>lt - less than</li>
+		<li>gtavg - greater than average</li>
+		<li>ltavg - less than average</li>
+	</ul>
+<li>samples - numeric, number of samples/munin-runs for average calculation (only when condition is one of gtavg or ltavg)</li>
+<li>limit - numeric, a time to wait before resending an alert in case the condition still matches (minutes)</li>
+<li>contacts - numeric (csv), a comma-seperated list of contact ids to be notified</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addAlert&nodeid=99999&pluginname=load&graphname=load&raisevalue=8&condition=gtavg&samples=15&limit=120&contacts=999,888</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addAlert' \
+\
+         -d 'nodeid=99999' \
+         -d 'pluginname=load' \
+         -d 'graphname=load' \
+         -d 'raisevalue=8' \
+         -d 'condition=gtavg' \
+         -d 'samples=15' \
+         -d 'limit=120' \
+         -d 'contacts=999,888' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"msg":"Alert stored and added to running configuration.",
+		"id":520
+	}
+</pre></div>
+
+
+
+
+
+<hr>
+<h2><a name="h2-deleteAlert"></a>deleteAlert</h2>
+<p>
+	Deletes an alert.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteAlert&alertid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteAlert' \
+\
+         -d 'alertid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"msg": "Alert removed and purged from running configuration."
+	}
+</pre></div>
+
+
+
+
+
+
+<hr>
+<h2><a name="h2-listAlertsByNode"></a>listAlertsByNode</h2>
+<p>
+	Returns a list of all configured alerts for the given node.<br/>
+	Alerts that are not accessible for the current user are not returned.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>nodeid - numeric, id of the node</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listAlertsByNode&nodeid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listAlertsByNode' \
+\
+         -d 'nodeid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	[
+		{
+			"id":"117",
+			"user_id":"2",
+			"node_id":"113",
+			"pluginname":"df",
+			"graphname":"_dev_mapper_system_root",
+			"raise_value":"95",
+			"condition":"gt",
+			"alert_limit":"1440",
+			"num_samples":"2",
+			"hostname":"test.example.com",
+			"contacts":[1,2]
+		},
+		{
+			"id":"353",
+			"user_id":"2",
+			"node_id":"113",
+			"pluginname":"load",
+			"graphname":"load",
+			"raise_value":"4",
+			"condition":"gtavg",
+			"alert_limit":"120",
+			"num_samples":"15",
+			"hostname":"test.example.com",
+			"contacts":[1,2]
+		},
+		...
+	]
+</pre></div>
+
+
+
+<hr>
+<h2><a name="h2-getAlert"></a>getAlert</h2>
+<p>
+	Returns a map for the requested alert data.<br/>
+	Alerts that are not accessible for the current user are not returned.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=getAlert&alertid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=getAlert' \
+\
+         -d 'alertid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"id":"999999",
+		"user_id":"2",
+		"node_id":"252",
+		"pluginname":"load",
+		"graphname":"load",
+		"raise_value":"12",
+		"condition":"gtavg",
+		"alert_limit":"120",
+		"num_samples":"15",
+		"hostname":"test.example.com",
+		"contacts": [3,4],
+	}
+</pre></div>
+
+
+
+<hr>
+<h2><a name="h2-listContacts"></a>listContacts</h2>
+<p>
+	Returns a list of contact entries.<br/>
+	Contacts that are not accessible for the current user are not returned.
+</p>
+
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=listContacts</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=listContacts' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	[
+		{
+			"id":"1",
+			"contact_name":"Test User",
+			"contact_email":"test.user@example.com",
+			"contact_username":"",
+			"contact_password":"",
+			"contact_mobile_nr":"",
+			"contact_code":"",
+			"contact_callback":"",
+			"contact_type":"basic",
+			"user_id":"2",
+			"callback_active":"0",
+			"email_active":"0",
+			"sms_active":"0",
+			"tts_active":"0",
+			"pushover_active":"1",
+			"app_active":"0",
+			"pushover_key":"abcdefghijklmnopqrstuvwxyz",
+			"s_mon":"08:00;22:00",
+			"s_tue":"08:00;22:00",
+			"s_wed":"08:00;22:00",
+			"s_thu":"08:00;22:00",
+			"s_fri":"08:00;22:00",
+			"s_sat":"10:00;20:00",
+			"s_sun":"10:00;20:00",
+			"timezone":"Europe\/Berlin"
+		},
+		...
+	]
+</pre></div>
+
+
+
+<hr>
+<h2><a name="h2-addContact"></a>addContact</h2>
+<p>
+	Adds a contact entry.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+	<li>contact_name - string, full name for the contact</li>
+	<li>contact_email - string, email address for the contact</li>
+</ul>
+
+<p>Optional Parameters</p>
+<ul>
+	<li>contact_mobile_nr - string, mobile phone number</li>
+	<ul>
+		<li>sms_active - boolean, activate sms notification (needs contact_mobile_nr)</li>
+		<li>tts_active - boolean, activate text-to-speech notification (needs contact_mobile_nr)</li>
+	</ul>
+	<li>contact_callback - string, callback URL</li>
+	<ul>
+		<li>callback_active - boolean, activate callback notification (needs contact_callback)</li>
+	</ul>
+	<li>pushover_key - string, pushover key</li>
+		<ul>
+		<li>pushover_active - boolean, activate pushover notification (needs pushover_key)</li>
+	</ul>
+	<li>timezone - string, defaults to 'Europe/Berlin'</li>
+</ul>
+
+
+<p>Optional Notification Schedule</p>
+<p>
+	For every weekday notifications can be disabled completely or configured for a specific time-period.<br/>
+	If omitted the schedule defaults to notifications 24/7.
+</p>
+<ul>
+	<li>monday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_mon_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_mon_from - string, start time for notifications in 24 hour format</li>
+		<li>s_mon_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>tuesday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_tue_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_tue_from - string, start time for notifications in 24 hour format</li>
+		<li>s_tue_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>wednesday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_wed_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_wed_from - string, start time for notifications in 24 hour format</li>
+		<li>s_wed_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>thursday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_thu_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_thu_from - string, start time for notifications in 24 hour format</li>
+		<li>s_thu_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>friday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_fri_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_fri_from - string, start time for notifications in 24 hour format</li>
+		<li>s_fri_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>saturday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_sat_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_sat_from - string, start time for notifications in 24 hour format</li>
+		<li>s_sat_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+	<li>sunday - default: enabled at 00:00-24:00</li>
+	<ul>
+		<li>s_sun_none - boolean, 'true' means 'no notifications'</li>
+		<li>s_sun_from - string, start time for notifications in 24 hour format</li>
+		<li>s_sun_to - string, end time for notifications in 24 hour format</li>
+	</ul>
+</ul>
+
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addContact&contact_name=Test User&contact_email=test@example.com</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addContact' \
+\
+         -d 'contact_name=Test User' \
+         -d 'contact_email=test@example.com' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Contact 'Test User' created.",
+		"id":8
+	}
+</pre></div>
+
+
+
+
+
+
+<hr>
+<h2><a name="h2-deleteContact"></a>deleteContact</h2>
+<p>
+	Deletes the contact with the given contactid.<br/>
+	Contacts that are not accessible for the current user are not deleted.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>contactid - numeric, id of the contact</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteContact&contactid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteContact' \
+\
+         -d 'contactid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Contact with contactid 999999 deleted."
+	}
+</pre></div>
+
+
+
+
+
+
+
+<hr>
+<h2><a name="h2-addAlertContact"></a>addAlertContact</h2>
+<p>
+	Adds a notification contact to an alert.<br/>
+	Only alerts/contacts that are accessible by the current user are accessable.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+<li>contactid - numeric, id of the contact</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=addAlertContact&alertid=999999&contactid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=addAlertContact' \
+\
+         -d 'alertid=999999' \
+         -d 'contactid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Alert notification contact added and running configuration updated."
+	}
+</pre></div>
+   
+   
+   
+   
+   
+<hr>
+<h2><a name="h2-deleteAlertContact"></a>deleteAlertContact</h2>
+<p>
+	Deletes a notification contact from an alert.<br/>
+	Only alerts/contacts that are accessible by the current user are accessable.
+</p>
+
+<p>Mandatory Parameters</p>
+<ul>
+<li>alertid - numeric, id of the alert</li>
+<li>contactid - numeric, id of the contact</li>
+</ul>
+<p>Example Request:</p>
+<div class="codehilite"><pre><span class="x"><?php echo BASEURL; ?>/api.php?key=<?php echo $user->apikey?>&method=deleteAlertContact&alertid=999999&contactid=999999</span>
+</pre></div>
+
+<div class="codehilite"><pre><span class="x">curl -i -X POST \
+         -d 'key=<?php echo $user->apikey?>' \
+         -d 'method=deleteAlertContact' \
+\
+         -d 'alertid=999999' \
+         -d 'contactid=999999' \
+<?php echo BASEURL; ?>/api.php ; echo</span>
+</pre></div>
+
+<p>Example Response:</p>
+<div class="codehilite"><pre>
+	{
+		"status":"ok",
+		"message":"Alert notification contact removed and running configuration updated."
+	}
+</pre></div>
+   
+   
     </section>
    
 

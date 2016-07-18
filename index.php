@@ -1,5 +1,5 @@
 <?php
-if($_GET['info'] && $_GET['debug'])
+if(isset($_GET['info']) && $_GET['info'] && isset($_GET['debug']) && $_GET['debug'])
 {
 	phpinfo();
 	die;
@@ -10,7 +10,7 @@ if(!isLoggedIn())
 	header("Location: login.php");
 	die;
 }
-if($_GET['action'] == "add")
+if(isset($_GET['action']) && $_GET['action'] == "add")
 {
 	if($_SESSION['role'] != "admin")
 	{
@@ -29,7 +29,7 @@ if($_GET['action'] == "add")
 	<head>
 	<?php $tpl->title = APP_NAME . " - Your Nodes"; include("templates/core/head.tpl.php"); ?>
 	</head>
-	<body <?php if($_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
+	<body <?php if(isset($_SESSION['minify']) && $_SESSION['minify'] == true) { echo 'class="desktop-detected pace-done minified"'; } else { echo 'class=""';} ?>>
 
 		<!-- HEADER -->
 		<header id="header">
@@ -75,7 +75,17 @@ if($_GET['action'] == "add")
 							<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-x" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 								<header>
 									<span class="widget-icon"> <i class="fa fa-align-justify"></i> </span>
-									<h2><?php  if($_SERVER['REQUEST_URI']  != "/index.php?action=add" && $_GET['action'] != "groups") { echo 'Your Nodes'; } elseif ($_GET['action'] == "groups") { echo 'Your Groups'; } else { echo 'Add Nodes'; echo $niuleft;}?></h2>									
+									<h2><?php  
+										if(
+											(!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] != "/index.php?action=add") && 
+											(!isset($_GET['action']) || $_GET['action'] != "groups")
+										) { 
+											echo 'Your Nodes'; 
+										} 
+										elseif (isset($_GET['action']) && $_GET['action'] == "groups") { 
+											echo 'Your Groups'; 
+										} 
+										else { echo 'Add Nodes'; echo $niuleft;}?></h2>									
 								</header>
 								<!-- widget div-->
 								<div>
@@ -92,7 +102,7 @@ if($_GET['action'] == "add")
 
 										
 										<?php 
-											if(!$_GET['action'] == "add")
+											if(!isset($_GET['action']) || $_GET['action'] != "add")
 											{
 												// load with ajax if user is admin to speed up frontpage loading time (because of high number of munin nodes)
 												if($_SESSION['role'] == "admin")
@@ -107,7 +117,7 @@ if($_GET['action'] == "add")
 												include("templates/munin/add.snipet.php");
 													
 											}
-											elseif($_GET['action'] == "groups")
+											elseif(isset($_GET['action']) && $_GET['action'] == "groups")
 											{
 												/*
 												if($_SESSION['role'] != "admin")
@@ -125,7 +135,7 @@ if($_GET['action'] == "add")
 													}
 												//}
 											}
-											elseif($_GET['action'] == "add")
+											elseif(isset($_GET['action']) && $_GET['action'] == "add")
 											{
 												if($_SESSION['role'] == "admin" || $_SESSION['role'] == "userext")
 												{
@@ -247,7 +257,7 @@ if($_GET['action'] == "add")
 		<?php include("templates/core/scripts.tpl.php"); ?>
 		<script type="application/javascript">
 		jQuery.ajaxSetup({ cache: false });
-		<?php if(!$atable) { ?>
+		<?php if(!isset($atable) || !$atable) { ?>
 			$(document).ready(function() {
 				var oTable = $('#nodetable').dataTable({
 					"sPaginationType" : "bootstrap_full",
